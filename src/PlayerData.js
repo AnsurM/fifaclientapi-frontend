@@ -29,39 +29,43 @@ class PlayerData extends Component {
         }
     }
 
+    storePlayers = (data) =>
+    {
+        console.log('data ', data.data);
+        const displayToUser = data.data.map((player, index) => 
+                                <div key = {index} style={{marginLeft: '30px', marginTop: '20px'}}>
+                                            <h2>Name: {player.player_name}</h2>
+                                            <h3>Position: {player.position}</h3>
+                                            <h3>Starting bid: {player.startingBid}</h3>
+                                            <h3>Buy Now Price: {player.buyNowPrice}</h3>
+                                            <button>Bought</button>
+                                            <br />
+                                            <br />
+                                            <button>Not Bought</button>
+                                        </div> 
+                            );
+        this.setState(
+                {Data: 
+                    <div style={{display:'flex', justifyContent: 'center'}}>
+                    {displayToUser}
+                    </div>
+                });
+    }
+
     onSubmit = () =>
     {
-        let that = this;
         fetch('http://localhost:3001/getData',{
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-            email: that.state.email,
-            apikey: that.state.apikey,
+            email: this.state.email,
+            apikey: this.state.apikey,
             instance: this.state.instance
             })
         })
         .then(response => response.json()) 
         .then(data => {
-            console.log('data ', data.data);
-            const displayToUser = data.data.map((player, index) => 
-                                    <div key = {index} style={{marginLeft: '30px', marginTop: '20px'}}>
-                                                <h2>Name: {player.player_name}</h2>
-                                                <h3>Position: {player.position}</h3>
-                                                <h3>Starting bid: {player.startingBid}</h3>
-                                                <h3>Buy Now Price: {player.buyNowPrice}</h3>
-                                                <button>Bought</button>
-                                                <br />
-                                                <br />
-                                                <button>Not Bought</button>
-                                            </div> 
-                                );
-        this.setState(
-                {Data: 
-                    <div style={{display:'flex', justifyContent: 'center'}}>
-                       {displayToUser}
-                    </div>
-                });
+            this.storePlayers(data);
         })
         .catch(function (error) {
             console.log(error);
