@@ -9,9 +9,27 @@ class PlayerData extends Component {
             Data: <h3>Press "Request Data" to check for available players.</h3>,
             email: this.props.data.email,
             apikey: this.props.data.apikey,
+            playersLeft: 0,
             instance: 0,
+            tradeID: [],
             ph: ""
         };
+    }
+
+    onBuyClick = (event, index) =>
+    {
+        let myData = {...this.state.Data};
+
+        const myData1 = myData.props.children.map((player, myindex) =>
+            {
+               if(player.key == index)
+               {
+                   myData.props.children.splice(myindex,1)
+                   return player;
+               }
+            });
+//            this.setState({Data: <h2>Getting data..</h2>, playersLeft: 0});
+            this.setState({Data: myData, playersLeft: myData.props.children.length});
     }
 
     onChange = (event) =>
@@ -30,29 +48,56 @@ class PlayerData extends Component {
         }
     }
 
-    storePlayers = (data) =>
+    async storePlayers(data)
     {
+        let that = this;
+        const buttonStyle =
+        {
+            backgroundColor: "green",
+            color: "yellow",
+            width: "60%",
+            height: "auto",
+            padding: "10px",
+            fontSize: "20px"
+        };
+
+        const cardStyle =
+        {
+            backgroundColor: "black",
+            color: "orange",
+            border: "2px solid green",
+            padding: "20px",            
+            marginLeft: '30px', 
+            marginTop: '20px'
+        };
+
         if(data.data)
         {
- //               console.log('data ', data.data);
+                // console.log('data ', data.data);
                 const displayToUser = data.data.map((player, index) => 
-                                        <div key = {index} style={{marginLeft: '30px', marginTop: '20px'}}>
+                                        <div key = {index} style={cardStyle}>
                                                     <h2>Name: {player.player_name}</h2>
+                                                    <h3>Rating: {player.player_rating}</h3>
                                                     <h3>Position: {player.position}</h3>
                                                     <h3>Starting bid: {player.startingBid}</h3>
                                                     <h3>Buy Now Price: {player.buyNowPrice}</h3>
-                                                    <button>Bought</button>
+                                                    <button style={buttonStyle} onClick = {(event) => this.onBuyClick(event,index)}>Bought</button>
                                                     <br />
-                                                    <br />
-                                                    <button>Not Bought</button>
-                                                </div> 
+                                        </div> 
                                     );
-                this.setState(
-                        {Data: 
+                const myTradeIDs = await data.data.map((player,index) =>
+                {
+                    return player.tradeId;
+                })
+                that.setState(
+                    {
+                        Data: 
                             <div style={{display:'flex', justifyContent: 'center'}}>
                             {displayToUser}
-                            </div>
-                        });
+                            </div>,
+                            tradeID: myTradeIDs,
+                            playersLeft: displayToUser.length}
+                        );
         }
         else
         {
@@ -67,32 +112,52 @@ class PlayerData extends Component {
         this.setState({ph: ""});
     }
 
+    onKeyDown = (event) =>
+    {
+        if(event.key == "Enter")
+        {
+            this.onSubmit();
+        }
+    }
+
     onSubmit = () =>
     {
-        fetch('http://localhost:3001/getData',{
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-            email: this.state.email,
-            apikey: this.state.apikey,
-            instance: this.state.instance
+        if(this.state.playersLeft == 0)
+        {
+
+            fetch('http://localhost:3001/getData',{
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                email: this.state.email,
+                apikey: this.state.apikey,
+                instance: this.state.instance
+                })
             })
-        })
-        .then(response => response.json()) 
-        .then(data => {
-            this.storePlayers(data);
-        })
-        .catch(function (error) {
-            console.log(error);
-            });
-        
+            .then(response => response.json()) 
+            .then(data => {
+                this.storePlayers(data);
+            })
+            .catch(function (error) {
+                console.log(error);
+                });
+        }        
+        else
+        {
+            const tempData = this.state.Data;
+            const players = this.state.playersLeft;
+            alert(`Please buy the remaining ${players} player(s) before requesting new players.`);
+
+            this.setState({Data: <h2>Getting data..</h2>, playersLeft: 0});
+            this.setState({Data: tempData, playersLeft: players});
+        }
     }
 
     render()
     {
-        
+        // console.log('Data : ', this.state.Data);   
         return(
-            <div>
+            <div tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown}>
                 <div style={{display:'flex', justifyContent: 'center'}}>
                 <button type='submit' onClick={this.onSubmit}><h3>Request Data</h3></button>
                 </div>
