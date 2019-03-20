@@ -81,6 +81,8 @@ class PlayerData extends Component {
                                                     <h3>Position: {player.position}</h3>
                                                     <h3>Starting bid: {player.startingBid}</h3>
                                                     <h3>Buy Now Price: {player.buyNowPrice}</h3>
+                                                    <h3>Time Remaining:</h3>
+                                                    <h3>{data.days} day(s), {data.hours} hours, {data.minutes} minutes.</h3>
                                                     <button style={buttonStyle} onClick = {(event) => this.onBuyClick(event,index)}>Bought</button>
                                                     <br />
                                         </div> 
@@ -134,7 +136,7 @@ class PlayerData extends Component {
                 instance: this.state.instance
                 })
             })
-            .then(response => response.json()) 
+            .then(response => response.json())             
             .then(data => {
                 this.storePlayers(data);
             })
