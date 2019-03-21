@@ -16,6 +16,11 @@ class PlayerData extends Component {
         };
     }
 
+    onPurchasePlayer = (tradeid) =>
+    {
+
+    }
+
     onBuyClick = (event, index) =>
     {
         let myData = {...this.state.Data};
@@ -73,9 +78,9 @@ class PlayerData extends Component {
 
         if(data.data)
         {
-                // console.log('data ', data.data);
+            // console.log('Data :', data.data);
                 const displayToUser = data.data.map((player, index) => 
-                                        <div key = {index} style={cardStyle}>
+                                        <div tradeID = {player.tradeId} key = {index} style={cardStyle}>
                                                     <h2>Name: {player.player_name}</h2>
                                                     <h3>Rating: {player.player_rating}</h3>
                                                     <h3>Position: {player.position}</h3>
@@ -99,7 +104,11 @@ class PlayerData extends Component {
                             </div>,
                             tradeID: myTradeIDs,
                             playersLeft: displayToUser.length}
-                        );
+                    );
+            const assignedPlayers = data.data.map(player =>
+                {
+                    return player.tradeId;
+                });
         }
         else
         {
