@@ -3,6 +3,7 @@ import './App.css';
 import Register from './Register';
 import PlayerData from './PlayerData';
 import SignIn from './SignIn';
+import PlayerHandler from './PlayerHandler';
 import 'tachyons';
 
 const axios = require('axios');
@@ -12,18 +13,10 @@ var display = null;
 class App extends Component {
 
   state = {
-    ID: "",
     route: "Login",
     email: "",
     apikey: "",
   };
-
-  onChange = (event) =>
-  {
-    this.setState({
-      ID: event.target.value
-    })
-  }
 
   updateRoute = (value) =>
   {
@@ -61,7 +54,8 @@ class App extends Component {
     {
       display =  
       <div>
-        <PlayerData data={this.state}/>
+        {/* <PlayerData data={this.state}/> */}
+        <PlayerHandler data={this.state}/>
       </div>
     }
     return (

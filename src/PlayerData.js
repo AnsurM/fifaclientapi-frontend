@@ -12,29 +12,55 @@ class PlayerData extends Component {
             playersLeft: 0,
             instance: 0,
             tradeID: [],
+            assignedActive: [],
             ph: ""
         };
-    }
-
-    onPurchasePlayer = (tradeid) =>
-    {
-
     }
 
     onBuyClick = (event, index) =>
     {
         let myData = {...this.state.Data};
-
-        const myData1 = myData.props.children.map((player, myindex) =>
+        console.log("MyData is: ", myData);
+        let myData1 = [];
+        let boughtID = 0;
+        var currAssigned = [...this.state.assignedActive];
+        var leftAssigned = [];
+        // console.log('Assgined players are: ', currAssigned);
+        myData.props.children.forEach((player, myindex) =>
             {
                if(player.key == index)
-               {
-                   myData.props.children.splice(myindex,1)
-                   return player;
-               }
-            });
-//            this.setState({Data: <h2>Getting data..</h2>, playersLeft: 0});
-            this.setState({Data: myData, playersLeft: myData.props.children.length});
+                {
+
+                    console.log("Player: ", player);
+                    // console.log("Bought player is: ", player.props.tradeID);
+                    boughtID = player.props.tradeID;
+                    //    myData.props.children.splice(myindex,1)
+                    // myData1.push(player);
+                    var ptag = document.createElement("p");
+                    var text = document.createTextNode("Bought Status: Checking!");
+                    ptag.appendChild(text);
+                    document.getElementById(player.key).appendChild(ptag);
+                    currAssigned.forEach((element, thisindex) => {
+                        // console.log("Element: ", element);
+                        if(element == player.props.tradeID)
+                        {
+                        }
+                        else
+                        {
+                          leftAssigned.push(element);
+                        }
+                    });
+                }
+                else
+                {
+                    myData1.push(player);
+                }
+        });
+            // console.log("MyData1 is : ", myData1.length);
+            // console.log("current assigned is : ", leftAssigned);
+            // console.log("Bought ID: ", boughtID);
+            // this.setState({Data: myData, playersLeft: myData.props.children.length});
+                this.setState({Data: myData, playersLeft: leftAssigned.length, assignedActive: leftAssigned});
     }
 
     onChange = (event) =>
@@ -79,36 +105,39 @@ class PlayerData extends Component {
         if(data.data)
         {
             // console.log('Data :', data.data);
-                const displayToUser = data.data.map((player, index) => 
-                                        <div tradeID = {player.tradeId} key = {index} style={cardStyle}>
-                                                    <h2>Name: {player.player_name}</h2>
-                                                    <h3>Rating: {player.player_rating}</h3>
-                                                    <h3>Position: {player.position}</h3>
-                                                    <h3>Starting bid: {player.startingBid}</h3>
-                                                    <h3>Buy Now Price: {player.buyNowPrice}</h3>
-                                                    <h3>Time Remaining:</h3>
-                                                    <h3>{data.days} day(s), {data.hours} hours, {data.minutes} minutes.</h3>
-                                                    <button style={buttonStyle} onClick = {(event) => this.onBuyClick(event,index)}>Bought</button>
-                                                    <br />
-                                        </div> 
-                                    );
-                const myTradeIDs = await data.data.map((player,index) =>
-                {
-                    return player.tradeId;
-                })
-                that.setState(
+                let displayToUser = data.data.map((player, index) => {
+
+                return (    
+                    <div id = {index} tradeID = {player.tradeId} key = {index} style={cardStyle}>
+                        <h2>Name: {player.player_name}</h2>
+                        <h3>Rating: {player.player_rating}</h3>
+                        <h3>Position: {player.position}</h3>
+                        <h3>Starting bid: {player.startingBid}</h3>
+                        <h3>Buy Now Price: {player.buyNowPrice}</h3>
+                        <h3>Time Remaining:</h3>
+                        <h3>{data.days} day(s), {data.hours} hours, {data.minutes} minutes.</h3>
+                        <button style={buttonStyle} onClick = {(event) => this.onBuyClick(event,index)}>Bought</button>
+                        <br />
+                    </div> 
+                    );
+                }
+                );
+
+                const assignedPlayers = data.data.map(player =>
+                    {
+                        return player.tradeId;
+                    });
+
+                    that.setState(
                     {
                         Data: 
                             <div style={{display:'flex', justifyContent: 'center'}}>
                             {displayToUser}
                             </div>,
-                            tradeID: myTradeIDs,
-                            playersLeft: displayToUser.length}
-                    );
-            const assignedPlayers = data.data.map(player =>
-                {
-                    return player.tradeId;
-                });
+                            playersLeft: displayToUser.length,
+                            assignedActive: assignedPlayers
+                    }
+                );
         }
         else
         {
@@ -151,7 +180,7 @@ class PlayerData extends Component {
             })
             .catch(function (error) {
                 console.log(error);
-                });
+            });
         }        
         else
         {
@@ -159,7 +188,7 @@ class PlayerData extends Component {
             const players = this.state.playersLeft;
             alert(`Please buy the remaining ${players} player(s) before requesting new players.`);
 
-            this.setState({Data: <h2>Getting data..</h2>, playersLeft: 0});
+//            this.setState({Data: <h2>Getting data..</h2>, playersLeft: 0});
             this.setState({Data: tempData, playersLeft: players});
         }
     }
