@@ -1,0 +1,181 @@
+#Price API
+    Description:
+        get billing price
+        Suggested request frequency: 1~2/minute
+    API:
+        https://sugar.sh/market/api/prices [modified @ 2018-10-22 14:57 +8]
+    Params:
+        pass => Your API secret key
+        skus => FFA19PS4, FFA19XBO, FFA19PCC
+        stock => stock you have [1K=1000][optional]
+    Method:
+        GET
+    
+   php example code
+    <?php
+    $ch = curl_init("https://sugar.sh/market/api/prices?pass=__REPLACE_SECRETKEY_HERE__&skus=FFA19PS4&stock=__REPLACE_STOCK_HERE__");
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    $return = curl_exec($ch);
+    curl_close($ch);
+
+    Respon(JSON):
+    {"ret":0,"msg":"modified at 2017-05-04 10:58:17","data":{"skus":"FFA19PS4","billingUnit":1000,"billingPrice":0.065,"billingCurrency":"USD"}}
+
+    *ret: Number 0:sucessed, 400:bad request, 403:forbidden, 404:user not active
+    *msg: String Tips for respon
+    *data: Array
+        *skus: platform
+        *billingUnit: billing Unit
+        *billingPrice: billing Price for Unit
+        *billingCurrency: billing Currency
+    
+#Maxbuy API
+    Description:
+        set max price you can buy
+    API:
+        https://sugar.sh/market/api/maxbuy
+    Params:
+        pass => Your API secret key
+        skus => FFA19PS4, FFA19XBO, FFA19PCC
+        maxbuy => maxbuy val  30000 = 30k
+    Method:
+        GET
+    
+   php example code
+    <?php
+    $ch = curl_init("https://sugar.sh/market/api/maxbuy?pass=__REPLACE_SECRETKEY_HERE__&skus=FFA19PS4&maxbuy=__REPLACE_MAXBUY_HERE__");
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    $return = curl_exec($ch);
+    curl_close($ch);
+
+    Respon(JSON):
+    {"ret":0,"msg":"now maxbuy 30000"}}
+
+    *ret: Number 0:sucessed, 400:bad request, 403:forbidden, 404:user not active
+    *msg: String Tips for respon
+    
+#Cancel API
+    Description:
+        cancel an order
+    API:
+        https://sugar.sh/market/api/cancel
+    Params:
+        pass   => Your API secret key
+        skus   => FFA19PS4, FFA19XBO, FFA19PCC
+        cardid => cardid in "Fetch API" Respon
+        reason => text for why you cancel this order [max length 200][optional]
+    Method:
+        GET
+    
+   php example code
+    <?php
+    $ch = curl_init("https://sugar.sh/market/api/cancel?pass=__REPLACE_SECRETKEY_HERE__&skus=FFA19PS4&cardid=123456&reason=out of stock");
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    $return = curl_exec($ch);
+    curl_close($ch);
+
+    Respon(JSON):
+    {"ret":0,"msg":"cancelled #123456 successfully"}
+
+    *ret: Number 0:sucessed, 400:bad request, 403:forbidden, 404:user not active
+    *msg: String Tips for respon
+    
+#Fetch API
+    Description:
+        request orders
+        Suggested request frequency: 50~60/minute
+        Please make sure that you'll complete the order within 5 minutes, or the order will be cancelled.
+        We'll confirm if the players have been bought before cancelling the order.
+    API:
+        https://sugar.sh/market/api
+    Params:
+        pass => Your API secret key
+        skus => FFA19PS4, FFA19XBO, FFA19PCC
+    Method:
+        GET
+    
+   php example code
+    <?php
+    $ch = curl_init("https://sugar.sh/market/api?pass=__REPLACE_SECRETKEY_HERE__&skus=FFA19PS4");
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    $return = curl_exec($ch);
+    curl_close($ch);
+
+    Respon(JSON):
+    {"ret":0,"msg":"got 2 players","data":[{"cardId":"1992343","itemId":"269342488204","tradeId":"184117600565","tradeState":"closed","tradeSkus":"FFA19PS4","resourceId":"235453","maskedDefId":"235453","definitionId":"235453","startingBid":9900,"buyNowPrice":10000,"billingPrice":0.65,"billingCurrency":"USD"},{"cardId":"1992347","itemId":"269098988156","tradeId":"184117648961","tradeState":"closed","tradeSkus":"FFA19PS4","resourceId":"233293","maskedDefId":"233293","definitionId":"233293","startingBid":9900,"buyNowPrice":10000,"billingPrice":0.65,"billingCurrency":"USD"}]}
+
+    *ret: Number 0:sucessed, 400:bad request, 403:forbidden, 404:user not active
+    *msg: String Tips for respon
+    *data: Array
+        *cardId": player card ID,
+        *itemId": itemId from fut,
+        *tradeId": tradeId from fut,
+        *tradeState": Trade State of fut market, values: active(pending for buy), expired(expired), closed(bought),
+        *tradeSkus": platform,
+        *resourceId": resourceId,
+        *maskedDefId": maskedDefId,
+        *definitionId": definitionId(player ID),
+        *startingBid": startingBid,
+        *buyNowPrice": buyNowPrice,
+        *billingCoins": billingCoins, **Actual coins means buyNowPrice - discardValue **
+        *billingPrice": billingPrice,
+        *billingCurrency": billingCurrency
+
+    *Note
+        if `data` is empty means no remaining players
+    
+#Result API
+    Description:
+        checking an order
+    API:
+        https://sugar.sh/market/api/result
+    Params:
+        pass   => Your API secret key
+        skus   => FFA19PS4, FFA19XBO, FFA19PCC
+        cardid => cardid in "Fetch API" Respon
+    Method:
+        GET
+    
+   php example code
+    <?php
+    $ch = curl_init("https://sugar.sh/market/api/result?pass=__REPLACE_SECRETKEY_HERE__&skus=FFA19PS4&cardid=123456");
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    $return = curl_exec($ch);
+    curl_close($ch);
+
+    Respon(JSON):
+    {"ret":0,"msg":"checked","data":{"tradeState":"closed","tradeId":"200761757843","tradeCoins":31000}}
+
+    *data: Array
+        *tradeState": Trade State of fut market, values: active(pending for buy), expired(expired), closed(bought),
+        *tradeId": itemId from fut,
+        *tradeCoins": transfer coins,
+
+    *ret: Number 0:sucessed, 400:bad request, 403:forbidden, 404:user not active
+    *msg: String Tips for respon
+    

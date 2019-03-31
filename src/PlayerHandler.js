@@ -14,6 +14,7 @@ class PlayerHandler extends Component {
             playerData: [],
             email: this.props.data.email,
             apikey: this.props.data.apikey,
+            billingRate: "Fetching Billing Rate. Please refresh if it doesn't update in 10 seconds.",
             playersLeft: 0,
             instance: 0,
             visible: false,
@@ -172,11 +173,11 @@ class PlayerHandler extends Component {
 
         const cardStyle =
         {
-            backgroundColor: "black",
-            color: "orange",
-            border: "2px solid green",
-            width: "300px",
-            margin: "20px 10px"
+            backgroundColor: "#3A4245",
+            color: "chartreuse",
+            border: "2px solid gold",
+            width: "250px",
+            margin: "10px 10px"
         };
 
         let toBeDisplayed = myData.map((player,index) =>
@@ -333,7 +334,7 @@ class PlayerHandler extends Component {
         else
         {
             this.setState({
-                instance: 0
+                instance: "",
             });
         }
     }
@@ -344,11 +345,15 @@ class PlayerHandler extends Component {
         {
             this.onSubmit();
         }
+        else if(event.key == "Shift")
+        {
+            this.setState({playSoundStatus: "STOPPED"});
+        }
     }
 
     getDataFromServer = () =>
     {
-        if(this.state.playersLeft <= 3)
+        if(this.state.playersLeft < 4)
         {
             if(this.state.searching)
             {
@@ -366,7 +371,7 @@ class PlayerHandler extends Component {
                     .then(data => {
                         if(data.data)
                         {
-                            if(this.state.playersLeft <= 3)
+                            if(this.state.playersLeft < 4)
                             {
                                 this.setState({playSoundStatus: "PLAYING"});
                                 this.storePlayerData(data);
@@ -388,13 +393,15 @@ class PlayerHandler extends Component {
                     .catch(function (error) {
                         console.log(error);
                     });    
-                }, 500);
+                }, 300);
             }
         }        
         else
         {
-            const players = this.state.playersLeft;
-            alert(`Please buy the remaining ${players} player(s) before requesting new players.`);
+//            const players = this.state.playersLeft;
+//            alert(`Please buy the remaining ${players} player(s) before requesting new players.`);
+              this.setState({playSoundStatus: "PLAYING", buttonText: "Request Players.", searching: false});
+//              this.storePlayerData(data);
         }
     }
     
@@ -418,24 +425,73 @@ class PlayerHandler extends Component {
         }
     }
 
+    componentDidMount() {
+        
+        fetch('http://localhost:3001/pricefetch')
+        .then(response => response.json())
+        .then(data => {
+//            console.log("Data for todays rate is: ", data);
+            if(data.billingRate)
+            {
+                const billRate = data.billingRate;
+//                const billRate = 0.080;
+                let newRate = billRate - 0.003;
+                newRate = Math.floor(newRate * 100 * 158 * 0.52);
+                this.setState({billingRate: `PKR ${newRate} / 100K`});
+                //per 1000 coins = 0.052 euro;
+                //per 100,000 = 5.2 euro;
+                //5.2 euro in pkr = 820.0 rs
+                //give client 425.0 rs.
+                // we get 395 rs per 100k.
+
+
+                // STEPS FOR CALCULATION
+                // newRate = rate - 0.003;
+                // newRate = newRate * 100; (per 100K)
+                // newRate = newRate * 158; (per 100K in PKR).
+                // showToClient = newRate * 0.52; (per 100K in PKR - our profit)
+                // display = "Today's rate is {showToClient} per 100K";
+
+
+            }
+        })
+        .catch(err => console.log("Error while fetching rate from server."));
+    }
+    
+
     render() {
         return (
             <div tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown} >
                     <div style={{display:'flex', justifyContent: 'center'}}>
-                    <button type='submit' onClick={this.onSubmit}><h3>{this.state.buttonText}</h3></button>
+                    <h3 style ={{color: "chartreuse"}}>Today's rate is: {this.state.billingRate}</h3>
                     </div>
-                    <h4>Max no of players at once.</h4>
-                    <input style={{marginLeft: '10px'}}
-                        placeholder={`Current Max Players: ${this.state.instance}`} 
-                        value = {""}
-                        onChange={this.onChange} />
+                    <div>
+                    <h4>Max no of players at once: </h4>
+                    <input style={{marginLeft: '10px', borderColor: "gold", borderWidth: "3px",
+                                    backgroundColor: "#3A4245", color: "gold", textAlign: "center",
+                                   width: "50px", height: "20px"
+                            }}
+                        placeholder= "" 
+                        value = {`${this.state.instance}`}
+                        onChange={this.onChange} ></input>
+                    </div>
                     <div>
                     {this.state.noPlayerDisplay}
                     </div>
                     <div>
-                    <button style={{backgroundColor: "seaGreen", color:"white"}}
+                    <button 
+                    style={{backgroundColor: "#3A4245", color:"gold", borderColor: "gold",  
+                    width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
                     onClick = {() => this.setState({playSoundStatus: "STOPPED"})}>
                     STOP SOUND
+                    </button>
+                    <button 
+                    onClick={this.onSubmit}
+                    // #3A4245
+                    style = {{backgroundColor: "#3A4245", color:"chartreuse", borderColor: "gold", 
+                              width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
+                    >
+                    {this.state.buttonText.toUpperCase()}
                     </button>
                     </div>
                     <div style={{display:'flex', justifyContent: "center", overflow: "auto", width: "90%", margin:"auto auto"}}>
@@ -450,6 +506,9 @@ class PlayerHandler extends Component {
                             width="400"
                             height="300"
                             effect="fadeInUp"
+                            style = {{backgroundColor: "cadetblue", color: "gold",
+                                    border: "5px solid red", borderSize: "10px"
+                            }}
                             // onClickAway={() => this.closeModal()}
                         >
                             <div>

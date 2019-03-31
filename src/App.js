@@ -54,13 +54,12 @@ class App extends Component {
     {
       display =  
       <div>
-        {/* <PlayerData data={this.state}/> */}
         <PlayerHandler data={this.state}/>
       </div>
     }
     return (
       <div className="App">
-        <h1 style={{display: 'flex', justifyContent: 'center'}}>Welcome to FUT Player Market</h1>
+        <h2 style={{display: 'flex', justifyContent: 'center'}}>Welcome to FUT Player Market</h2>
         {display}
       </div>
     );
