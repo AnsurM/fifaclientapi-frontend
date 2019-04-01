@@ -43,10 +43,10 @@ class SignIn extends React.Component {
           }
           else
           {
-            alert("Wrong email/password! Please try again.");
+            alert(result.message);
           }
     })
-    .catch(err => alert('Invalid credentials'))
+    .catch(err => alert(err.message))
 
   }
 
@@ -66,8 +66,9 @@ class SignIn extends React.Component {
       password: this.state.signInPassword,
       })
     })
-    .then(user => {
-        if(user.status == 200)
+    .then(response => {
+        console.log(response);
+        if(response.status == 200)
         {          
            fetch('http://localhost:3001/getApiKey',{
                 method: 'post',
@@ -94,7 +95,14 @@ class SignIn extends React.Component {
         }
         else
         {
-          alert("Invalid login details.");
+          if(response.status == 400)
+          {
+            alert("No data found. Please check your login credentials.");
+          }
+          else
+          {
+            alert("We are experiencing difficulties logging in. Please try later.");
+          }
         }
       })
     .catch(err => {console.log(err)});
@@ -103,7 +111,7 @@ class SignIn extends React.Component {
  onSubmitSignIn1 = (route) =>
   {
     this.validateLogIn(route);
-}
+  }
 
   render(){
     return (

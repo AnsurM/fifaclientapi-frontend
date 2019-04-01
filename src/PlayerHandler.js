@@ -14,6 +14,8 @@ class PlayerHandler extends Component {
             playerData: [],
             email: this.props.data.email,
             apikey: this.props.data.apikey,
+            isAdmin: this.props.data.email == 'admin@themarket.org' ? true : false,
+
             billingRate: "Fetching Billing Rate. Please refresh if it doesn't update in 10 seconds.",
             playersLeft: 0,
             instance: 0,
@@ -357,6 +359,7 @@ class PlayerHandler extends Component {
         {
             if(this.state.searching)
             {
+//                let myEmail = this.state.isAdmin ? "waqar@gmail.com" : this.state.email;
                 setTimeout(() => {
                     fetch('http://localhost:3001/getData',{
                         method: 'post',
@@ -458,12 +461,77 @@ class PlayerHandler extends Component {
         .catch(err => console.log("Error while fetching rate from server."));
     }
     
+    onClickSignOut = () => {
+
+        let email = this.state.email;
+
+        fetch('http://localhost:3001/signout',{
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+            email: email
+            })
+        })
+        .then(response => response.json())             
+        .then(data => {
+            this.props.updateRoute("Login");
+        })
+        .catch(err => console.log("Err sending logout req"));
+    }
+
+    onClickTable = () =>
+    {
+        this.props.updateRoute("Table");
+    }
+
+    signOutAllUsers = () =>
+    {
+        fetch('http://localhost:3001/supersignout',{
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+            email: this.state.email
+            })
+        })
+        .then(response => response.json())             
+        .then(data => {
+            if(data.message == "SUCCESS")
+            {
+                alert("All users logged out.");
+            }
+            else
+            {
+                alert("Error logging users out.");
+            }
+        })
+        .catch(err => console.log("Err processing all log out req"));
+
+    }
 
     render() {
+        let isAdminStatus = this.state.isAdmin;
+        console.log("isAdmin :", isAdminStatus);
+        let superLogOut = null;
+        if(isAdminStatus)
+        {
+            superLogOut = 
+            <div>
+            <button 
+            style = {{backgroundColor: "black", color:"red", borderColor: "gold", 
+                  width: "auto", height: "auto", padding: "8px", margin: "30px 50px"}}                        
+            onClick={this.signOutAllUsers}>Log ALL USERS Out</button>
+            <button 
+            style = {{backgroundColor: "black", color:"white", borderColor: "gold", 
+                  width: "auto", height: "auto", padding: "8px", margin: "30px 50px"}}                        
+            onClick={this.onClickTable}>Records</button>
+            </div>;
+        }
+
         return (
             <div>
 
             <div style={{display:"flex", width: "100%"}}  tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown} >
+                    
                     <div style = {{display:"flex-start", width: "20%"}} id = "ALL NON-PLAYER INFO">
 
                     <div style={{display:'flex', justifyContent: 'center'}}>
@@ -480,14 +548,14 @@ class PlayerHandler extends Component {
                         value = {`${this.state.instance}`}
                         onChange={this.onChange} ></input>
                     </div>
+
                     <div>
                     {this.state.noPlayerDisplay}
                     </div>
-
                     <div>
                     <button 
                     style={{backgroundColor: "#3A4245", color:"gold", borderColor: "gold",  
-                    width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
+                    width: "auto", height: "auto", padding: "8px", margin: "10px 50px"}}
                     onClick = {() => this.setState({playSoundStatus: "STOPPED"})}>
                     STOP SOUND
                     </button>
@@ -495,12 +563,21 @@ class PlayerHandler extends Component {
                     onClick={this.onSubmit}
                     // #3A4245
                     style = {{backgroundColor: "#3A4245", color:"chartreuse", borderColor: "gold", 
-                              width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
+                              width: "auto", height: "auto", padding: "8px", margin: "10px 50px"}}
                     >
                     {this.state.buttonText.toUpperCase()}
                     </button>
                     </div>
+                    <div>
+                        <button 
+                        style = {{backgroundColor: "black", color:"red", borderColor: "gold", 
+                              width: "auto", height: "auto", padding: "8px", margin: "30px 50px"}}                        
+                        onClick={this.onClickSignOut}>Log Out</button>
+                        {superLogOut}
                     </div>
+                    </div>
+
+
 
                     <div id="PLAYER DATA" style = {{display:"flex-end", width: "80%"}}>
                     <div style = {{width: "100%", overflowX: "auto"}}>

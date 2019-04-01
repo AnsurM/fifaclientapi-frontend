@@ -3,8 +3,10 @@ import './App.css';
 import Register from './Register';
 import PlayerData from './PlayerData';
 import SignIn from './SignIn';
+import TableClass from './TableClass';
 import PlayerHandler from './PlayerHandler';
 import 'tachyons';
+
 
 const axios = require('axios');
 
@@ -54,7 +56,14 @@ class App extends Component {
     {
       display =  
       <div>
-        <PlayerHandler data={this.state}/>
+        <PlayerHandler data={this.state} updateRoute={this.updateRoute}/>
+      </div>
+    }
+    else if(this.state.route == "Table")
+    {
+      display =  
+      <div>
+        <TableClass data={this.state}/>
       </div>
     }
     return (
