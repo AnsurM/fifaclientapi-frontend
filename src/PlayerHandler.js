@@ -207,7 +207,7 @@ class PlayerHandler extends Component {
 
         this.setState({
             displayData: 
-            <div style={{display:'flex', justifyContent: 'center'}}>
+            <div style={{display:'inline-flex', justifyContent: 'center'}}>
             {toBeDisplayed}
             </div>,
             noPlayerDisplay:
@@ -393,7 +393,7 @@ class PlayerHandler extends Component {
                     .catch(function (error) {
                         console.log(error);
                     });    
-                }, 300);
+                }, 400);
             }
         }        
         else
@@ -460,6 +460,105 @@ class PlayerHandler extends Component {
     
 
     render() {
+        return (
+            <div>
+
+            <div style={{display:"flex", width: "100%"}}  tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown} >
+                    <div style = {{display:"flex-start", width: "20%"}} id = "ALL NON-PLAYER INFO">
+
+                    <div style={{display:'flex', justifyContent: 'center'}}>
+                    <h3 style ={{color: "chartreuse"}}>Today's rate is: {this.state.billingRate}</h3>
+                    </div>
+                    
+                    <div>
+                    <h4>Max no of players at once: </h4>
+                    <input style={{marginLeft: '10px', borderColor: "gold", borderWidth: "3px",
+                                    backgroundColor: "#3A4245", color: "gold", textAlign: "center",
+                                   width: "50px", height: "20px"
+                            }}
+                        placeholder= "" 
+                        value = {`${this.state.instance}`}
+                        onChange={this.onChange} ></input>
+                    </div>
+                    <div>
+                    {this.state.noPlayerDisplay}
+                    </div>
+
+                    <div>
+                    <button 
+                    style={{backgroundColor: "#3A4245", color:"gold", borderColor: "gold",  
+                    width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
+                    onClick = {() => this.setState({playSoundStatus: "STOPPED"})}>
+                    STOP SOUND
+                    </button>
+                    <button 
+                    onClick={this.onSubmit}
+                    // #3A4245
+                    style = {{backgroundColor: "#3A4245", color:"chartreuse", borderColor: "gold", 
+                              width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
+                    >
+                    {this.state.buttonText.toUpperCase()}
+                    </button>
+                    </div>
+                    </div>
+
+                    <div id="PLAYER DATA" style = {{display:"flex-end", width: "80%"}}>
+                    <div style = {{width: "100%", overflowX: "auto"}}>
+                    {this.state.displayData}  
+                    </div>
+                    </div>
+
+            </div>
+
+            <div id="MODAL AND SOUND">
+                    <section>
+                        {/* <input type="button" value="Open" onClick={() => this.openModal()} /> */}
+                        <Modal 
+                            visible={this.state.visible}
+                            width="400"
+                            height="300"
+                            effect="fadeInUp"
+                            style = {{backgroundColor: "cadetblue", color: "gold",
+                                    border: "5px solid red", borderSize: "10px"
+                            }}
+                            // onClickAway={() => this.closeModal()}
+                        >
+                            <div>
+                                <h1>Cancel Purchase</h1>
+                                <p>Are you sure you want to cancel the purchase of this player? Click YES to proceed, or NO to go back.</p>
+                                <br />
+                                <button onClick = {this.clickModalOK} 
+                                style={{backgroundColor: "red", color: "white", width: "100px", height: "50px"}}>
+                                YES
+                                </button>
+                                <br />
+                                <br />
+                                <button onClick = {this.closeModal} 
+                                style={{backgroundColor: "green", color: "white",width: "100px", height: "50px"}}>
+                                NO
+                                </button>
+                            </div>
+                        </Modal>
+                    </section>
+                    <Sound
+                    url="https://www.soundjay.com/button/beep-08b.mp3"
+                    playStatus={this.state.playSoundStatus}
+                    playFromPosition={0 /* in milliseconds */}
+                    volume={100}
+                    autoLoad={true}
+                    loop={true}
+                    // onLoading={this.handleSongLoading}
+                    // onPlaying={this.handleSongPlaying}
+                    // onFinishedPlaying={this.handleSongFinishedPlaying}
+                    />
+            </div> 
+
+            </div>
+        );
+    }
+
+
+    render1() {
         return (
             <div tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown} >
                     <div style={{display:'flex', justifyContent: 'center'}}>
