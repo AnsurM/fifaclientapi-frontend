@@ -63,7 +63,7 @@ class App extends Component {
     {
       display =  
       <div>
-        <TableClass data={this.state}/>
+        <TableClass data={this.state} updateRoute={this.updateRoute}/>
       </div>
     }
     return (

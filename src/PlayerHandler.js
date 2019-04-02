@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Modal from 'react-awesome-modal';
 import Sound from 'react-sound';
+import Notifications, {notify} from 'react-notify-toast';
+import ReactLoading from 'react-loading';
+
 
 class PlayerHandler extends Component {
 
@@ -18,7 +21,8 @@ class PlayerHandler extends Component {
 
             billingRate: "Fetching Billing Rate. Please refresh if it doesn't update in 10 seconds.",
             playersLeft: 0,
-            instance: 0,
+            instance: "",
+            maxPlayers: 2,
             visible: false,
             cardid: 0,
             playSoundStatus: "STOPPED"
@@ -43,17 +47,14 @@ class PlayerHandler extends Component {
         })
         .then(response => response.json())             
         .then(data => {
-            console.log("Cancel request returned: ", data.msg);
+//            console.log("Cancel request returned: ", data.msg);
             if(data.ret == 0)
             {
-                alert("The purchase was successfully cancelled.");
-                // this.setState({tradeid: 0});
-                // this.storePlayerData(data);
+                notify.show(("The purchase was successfully cancelled."), "error", 6000);
             }
             else
             {
-                alert("The purchase cannot be cancelled. Reason: ", data.msg);
-                console.log("Response: ", data.msg);
+                notify.show(`The purchase cannot be cancelled. Reason: ${data.msg}`, "warning", 6000);
                 // this.setState({noPlayerDisplay: <h3>{`${data.message} \t`}</h3>})
             }
 
@@ -258,7 +259,7 @@ class PlayerHandler extends Component {
                 {
                     if(data.data.tradeState == 'closed')
                     {
-                        alert(`Trade ID ${currPlayers[index].name} has been bought.`);
+                        notify.show(("CONGRATULATIONS! " + `${currPlayers[index].name}` + " has been bought!."),("success"), (5000));
                         currPlayers[index].status = "Bought!";
                         currPlayers.splice(index,1);
                         // console.log("State Data: ", this.state.Data);
@@ -273,7 +274,7 @@ class PlayerHandler extends Component {
                     else if(data.data.tradeState == 'expired')
                     {
                         // console.log(`You took too long buyg`);
-                        alert(`This player (${currPlayers[index].name}) has expired.`);
+                        notify.show(("Unfortunately, listing for " + `${currPlayers[index].name}` + " has EXPIRED and was not bought."),("error"),(8000));
                         currPlayers[index].status = "This player has expired.";
                         // currPlayers.splice(index,1);
                         // console.log("State Data: ", this.state.Data);
@@ -288,6 +289,7 @@ class PlayerHandler extends Component {
                     else if(data.data.tradeState == 'active')
                     {
                         // console.log(`You took too long buyg`);
+                        notify.show((`${currPlayers[index].name}` + " has not been bought yet!."),("warning"), (8000));
                         currPlayers[index].status = "NOT Bought yet.";
                         // currPlayers.splice(index,1);
                         // console.log("State Data: ", this.state.Data);
@@ -300,28 +302,22 @@ class PlayerHandler extends Component {
                         this.setState({playerData: currPlayers, playersLeft: notBought}, () => this.displayPlayerData(currPlayers));
                     }
                 }
-                else
-                {                
-                    console.log(`Trade ID ${playerID} has not been bought.`);
-                    currPlayers[index].status = "NOT Bought!";
-    //                currPlayers = currPlayers.splice(index-1,1);
-                    // console.log("State Data: ", this.state.Data);
-                    // console.log("Curr Players: ", currPlayers);
-    //                notBought--;
-                    this.setState({playerData: currPlayers, playersLeft: notBought}, () => this.displayPlayerData(currPlayers));
-
-
-                    console.log("Server response for status check: ", data);
-                }
             }
             else
-            {
-                
+            {                
+                console.log(`Trade ID ${playerID}` + " has not been bought.");
+                notify.show(("An error occured while checking status.\nPlease retry after 2 minutes."), ("warning"), (7500));
+                currPlayers[index].status = "Please re-click me after 2 minutes";
+                this.setState({playerData: currPlayers, playersLeft: notBought}, () => this.displayPlayerData(currPlayers));
+                console.log("Server response for status check: ", data);
             }
-        })
+    })
         .catch(function (error) {
             console.log("Server error for status check: ", error);
-        });
+            notify.show(("An error occured while checking status.\nPlease retry after 2 minutes."), ("warning"), (7500));
+            currPlayers[index].status = "Please re-click me after 2 minutes";
+            this.setState({playerData: currPlayers, playersLeft: notBought}, () => this.displayPlayerData(currPlayers));
+    });
 
     }
 
@@ -329,15 +325,25 @@ class PlayerHandler extends Component {
     {
         if(event.target.value > 0)
         {
-            this.setState({
-                instance: event.target.value
-            });
+            if(event.target.value > 4)
+                this.setState({
+                    instance: 4,
+                    maxPlayers: 4
+                });
+            else
+            {
+                this.setState({
+                    instance: event.target.value,
+                    maxPlayers: event.target.value
+                });
+            }
         }
         else
         {
             this.setState({
                 instance: "",
-            });
+                maxPlayers: 2
+        });
         }
     }
 
@@ -355,7 +361,8 @@ class PlayerHandler extends Component {
 
     getDataFromServer = () =>
     {
-        if(this.state.playersLeft < 4)
+        let max = this.state.maxPlayers;
+        if(this.state.playersLeft < max)
         {
             if(this.state.searching)
             {
@@ -374,7 +381,7 @@ class PlayerHandler extends Component {
                     .then(data => {
                         if(data.data)
                         {
-                            if(this.state.playersLeft < 4)
+                            if(this.state.playersLeft < max)
                             {
                                 this.setState({playSoundStatus: "PLAYING"});
                                 this.storePlayerData(data);
@@ -517,19 +524,19 @@ class PlayerHandler extends Component {
             superLogOut = 
             <div>
             <button 
-            style = {{backgroundColor: "black", color:"red", borderColor: "gold", 
-                  width: "auto", height: "auto", padding: "8px", margin: "30px 50px"}}                        
-            onClick={this.signOutAllUsers}>Log ALL USERS Out</button>
-            <button 
             style = {{backgroundColor: "black", color:"white", borderColor: "gold", 
                   width: "auto", height: "auto", padding: "8px", margin: "30px 50px"}}                        
             onClick={this.onClickTable}>Records</button>
+            <button 
+            style = {{backgroundColor: "black", color:"red", borderColor: "gold", 
+                  width: "auto", height: "auto", padding: "8px", margin: "30px 50px"}}                        
+            onClick={this.signOutAllUsers}>Log ALL USERS Out</button>
             </div>;
         }
 
         return (
             <div>
-
+            <Notifications />
             <div style={{display:"flex", width: "100%"}}  tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown} >
                     
                     <div style = {{display:"flex-start", width: "20%"}} id = "ALL NON-PLAYER INFO">
@@ -542,20 +549,17 @@ class PlayerHandler extends Component {
                     <h4>Max no of players at once: </h4>
                     <input style={{marginLeft: '10px', borderColor: "gold", borderWidth: "3px",
                                     backgroundColor: "#3A4245", color: "gold", textAlign: "center",
-                                   width: "50px", height: "20px"
+                                   width: "100px", height: "25px"
                             }}
-                        placeholder= "" 
-                        value = {`${this.state.instance}`}
+                        placeholder= "default is 2" 
+                        value = {this.state.instance}
                         onChange={this.onChange} ></input>
                     </div>
 
                     <div>
-                    {this.state.noPlayerDisplay}
-                    </div>
-                    <div>
                     <button 
                     style={{backgroundColor: "#3A4245", color:"gold", borderColor: "gold",  
-                    width: "auto", height: "auto", padding: "8px", margin: "10px 50px"}}
+                    width: "auto", height: "auto", padding: "8px", margin: "50px 50px"}}
                     onClick = {() => this.setState({playSoundStatus: "STOPPED"})}>
                     STOP SOUND
                     </button>
@@ -563,7 +567,7 @@ class PlayerHandler extends Component {
                     onClick={this.onSubmit}
                     // #3A4245
                     style = {{backgroundColor: "#3A4245", color:"chartreuse", borderColor: "gold", 
-                              width: "auto", height: "auto", padding: "8px", margin: "10px 50px"}}
+                              width: "auto", height: "auto", padding: "4px", margin: "5px 50px"}}
                     >
                     {this.state.buttonText.toUpperCase()}
                     </button>
@@ -580,9 +584,14 @@ class PlayerHandler extends Component {
 
 
                     <div id="PLAYER DATA" style = {{display:"flex-end", width: "80%"}}>
-                    <div style = {{width: "100%", overflowX: "auto"}}>
-                    {this.state.displayData}  
-                    </div>
+                        <div style = {{width: "100%", overflowX: "auto"}}>
+                            {this.state.displayData}
+                            <div style={{marginLeft: "45%"}}>
+                            {this.state.searching ? <h3><ReactLoading type="spin" color="chartreuse"/></h3> : null}  
+                            </div>
+                            <br />
+                            {this.state.noPlayerDisplay}
+                        </div>
                     </div>
 
             </div>
@@ -634,90 +643,93 @@ class PlayerHandler extends Component {
         );
     }
 
-
-    render1() {
-        return (
-            <div tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown} >
-                    <div style={{display:'flex', justifyContent: 'center'}}>
-                    <h3 style ={{color: "chartreuse"}}>Today's rate is: {this.state.billingRate}</h3>
-                    </div>
-                    <div>
-                    <h4>Max no of players at once: </h4>
-                    <input style={{marginLeft: '10px', borderColor: "gold", borderWidth: "3px",
-                                    backgroundColor: "#3A4245", color: "gold", textAlign: "center",
-                                   width: "50px", height: "20px"
-                            }}
-                        placeholder= "" 
-                        value = {`${this.state.instance}`}
-                        onChange={this.onChange} ></input>
-                    </div>
-                    <div>
-                    {this.state.noPlayerDisplay}
-                    </div>
-                    <div>
-                    <button 
-                    style={{backgroundColor: "#3A4245", color:"gold", borderColor: "gold",  
-                    width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
-                    onClick = {() => this.setState({playSoundStatus: "STOPPED"})}>
-                    STOP SOUND
-                    </button>
-                    <button 
-                    onClick={this.onSubmit}
-                    // #3A4245
-                    style = {{backgroundColor: "#3A4245", color:"chartreuse", borderColor: "gold", 
-                              width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
-                    >
-                    {this.state.buttonText.toUpperCase()}
-                    </button>
-                    </div>
-                    <div style={{display:'flex', justifyContent: "center", overflow: "auto", width: "90%", margin:"auto auto"}}>
-                    <div>
-                    {this.state.displayData}  
-                    </div>
-                    </div>
-                    <section>
-                        {/* <input type="button" value="Open" onClick={() => this.openModal()} /> */}
-                        <Modal 
-                            visible={this.state.visible}
-                            width="400"
-                            height="300"
-                            effect="fadeInUp"
-                            style = {{backgroundColor: "cadetblue", color: "gold",
-                                    border: "5px solid red", borderSize: "10px"
-                            }}
-                            // onClickAway={() => this.closeModal()}
-                        >
-                            <div>
-                                <h1>Cancel Purchase</h1>
-                                <p>Are you sure you want to cancel the purchase of this player? Click YES to proceed, or NO to go back.</p>
-                                <br />
-                                <button onClick = {this.clickModalOK} 
-                                style={{backgroundColor: "red", color: "white", width: "100px", height: "50px"}}>
-                                YES
-                                </button>
-                                <br />
-                                <br />
-                                <button onClick = {this.closeModal} 
-                                style={{backgroundColor: "green", color: "white",width: "100px", height: "50px"}}>
-                                NO
-                                </button>
-                            </div>
-                        </Modal>
-                    </section>
-                    <Sound
-                    url="https://www.soundjay.com/button/beep-08b.mp3"
-                    playStatus={this.state.playSoundStatus}
-                    playFromPosition={0 /* in milliseconds */}
-                    volume={100}
-                    autoLoad={true}
-                    loop={true}
-                    // onLoading={this.handleSongLoading}
-                    // onPlaying={this.handleSongPlaying}
-                    // onFinishedPlaying={this.handleSongFinishedPlaying}
-                    />
-            </div> 
-        );
-    }
 }
 
 export default PlayerHandler;
+
+
+
+
+    // render1() {
+    //     return (
+    //         <div tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown} >
+    //                 <div style={{display:'flex', justifyContent: 'center'}}>
+    //                 <h3 style ={{color: "chartreuse"}}>Today's rate is: {this.state.billingRate}</h3>
+    //                 </div>
+    //                 <div>
+    //                 <h4>Max no of players at once: </h4>
+    //                 <input style={{marginLeft: '10px', borderColor: "gold", borderWidth: "3px",
+    //                                 backgroundColor: "#3A4245", color: "gold", textAlign: "center",
+    //                                width: "50px", height: "20px"
+    //                         }}
+    //                     placeholder= "" 
+    //                     value = {`${this.state.instance}`}
+    //                     onChange={this.onChange} ></input>
+    //                 </div>
+    //                 <div>
+    //                 {this.state.noPlayerDisplay}
+    //                 </div>
+    //                 <div>
+    //                 <button 
+    //                 style={{backgroundColor: "#3A4245", color:"gold", borderColor: "gold",  
+    //                 width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
+    //                 onClick = {() => this.setState({playSoundStatus: "STOPPED"})}>
+    //                 STOP SOUND
+    //                 </button>
+    //                 <button 
+    //                 onClick={this.onSubmit}
+    //                 // #3A4245
+    //                 style = {{backgroundColor: "#3A4245", color:"chartreuse", borderColor: "gold", 
+    //                           width: "auto", height: "auto", padding: "8px", margin: "0px 50px"}}
+    //                 >
+    //                 {this.state.buttonText.toUpperCase()}
+    //                 </button>
+    //                 </div>
+    //                 <div style={{display:'flex', justifyContent: "center", overflow: "auto", width: "90%", margin:"auto auto"}}>
+    //                 <div>
+    //                 {this.state.displayData}  
+    //                 </div>
+    //                 </div>
+    //                 <section>
+    //                     {/* <input type="button" value="Open" onClick={() => this.openModal()} /> */}
+    //                     <Modal 
+    //                         visible={this.state.visible}
+    //                         width="400"
+    //                         height="300"
+    //                         effect="fadeInUp"
+    //                         style = {{backgroundColor: "cadetblue", color: "gold",
+    //                                 border: "5px solid red", borderSize: "10px"
+    //                         }}
+    //                         // onClickAway={() => this.closeModal()}
+    //                     >
+    //                         <div>
+    //                             <h1>Cancel Purchase</h1>
+    //                             <p>Are you sure you want to cancel the purchase of this player? Click YES to proceed, or NO to go back.</p>
+    //                             <br />
+    //                             <button onClick = {this.clickModalOK} 
+    //                             style={{backgroundColor: "red", color: "white", width: "100px", height: "50px"}}>
+    //                             YES
+    //                             </button>
+    //                             <br />
+    //                             <br />
+    //                             <button onClick = {this.closeModal} 
+    //                             style={{backgroundColor: "green", color: "white",width: "100px", height: "50px"}}>
+    //                             NO
+    //                             </button>
+    //                         </div>
+    //                     </Modal>
+    //                 </section>
+    //                 <Sound
+    //                 url="https://www.soundjay.com/button/beep-08b.mp3"
+    //                 playStatus={this.state.playSoundStatus}
+    //                 playFromPosition={0 /* in milliseconds */}
+    //                 volume={100}
+    //                 autoLoad={true}
+    //                 loop={true}
+    //                 // onLoading={this.handleSongLoading}
+    //                 // onPlaying={this.handleSongPlaying}
+    //                 // onFinishedPlaying={this.handleSongFinishedPlaying}
+    //                 />
+    //         </div> 
+    //     );
+    // }
