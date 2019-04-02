@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/AnsurM/precache-manifest.e0b9cb4b6fd85511d56c9e5fc5ea897a.js"
+  "/AnsurM/fifaclientapi-frontend/precache-manifest.d81ccbe55f8c5f4e4dafd20992c632c6.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/AnsurM/index.html", {
+workbox.routing.registerNavigationRoute("/AnsurM/fifaclientapi-frontend/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });

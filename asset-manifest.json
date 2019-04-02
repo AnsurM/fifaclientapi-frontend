@@ -1,15 +1,15 @@
 {
-  "main.css": "/AnsurM/static/css/main.82167697.chunk.css",
-  "main.js": "/AnsurM/static/js/main.50c2dc18.chunk.js",
-  "main.js.map": "/AnsurM/static/js/main.50c2dc18.chunk.js.map",
-  "runtime~main.js": "/AnsurM/static/js/runtime~main.6c271d86.js",
-  "runtime~main.js.map": "/AnsurM/static/js/runtime~main.6c271d86.js.map",
-  "static/css/2.ce697ac3.chunk.css": "/AnsurM/static/css/2.ce697ac3.chunk.css",
-  "static/js/2.0827f423.chunk.js": "/AnsurM/static/js/2.0827f423.chunk.js",
-  "static/js/2.0827f423.chunk.js.map": "/AnsurM/static/js/2.0827f423.chunk.js.map",
-  "index.html": "/AnsurM/index.html",
-  "precache-manifest.e0b9cb4b6fd85511d56c9e5fc5ea897a.js": "/AnsurM/precache-manifest.e0b9cb4b6fd85511d56c9e5fc5ea897a.js",
-  "service-worker.js": "/AnsurM/service-worker.js",
-  "static/css/2.ce697ac3.chunk.css.map": "/AnsurM/static/css/2.ce697ac3.chunk.css.map",
-  "static/css/main.82167697.chunk.css.map": "/AnsurM/static/css/main.82167697.chunk.css.map"
+  "main.css": "/AnsurM/fifaclientapi-frontend/static/css/main.82167697.chunk.css",
+  "main.js": "/AnsurM/fifaclientapi-frontend/static/js/main.0cb90369.chunk.js",
+  "main.js.map": "/AnsurM/fifaclientapi-frontend/static/js/main.0cb90369.chunk.js.map",
+  "runtime~main.js": "/AnsurM/fifaclientapi-frontend/static/js/runtime~main.f7142e13.js",
+  "runtime~main.js.map": "/AnsurM/fifaclientapi-frontend/static/js/runtime~main.f7142e13.js.map",
+  "static/css/2.ce697ac3.chunk.css": "/AnsurM/fifaclientapi-frontend/static/css/2.ce697ac3.chunk.css",
+  "static/js/2.0827f423.chunk.js": "/AnsurM/fifaclientapi-frontend/static/js/2.0827f423.chunk.js",
+  "static/js/2.0827f423.chunk.js.map": "/AnsurM/fifaclientapi-frontend/static/js/2.0827f423.chunk.js.map",
+  "index.html": "/AnsurM/fifaclientapi-frontend/index.html",
+  "precache-manifest.d81ccbe55f8c5f4e4dafd20992c632c6.js": "/AnsurM/fifaclientapi-frontend/precache-manifest.d81ccbe55f8c5f4e4dafd20992c632c6.js",
+  "service-worker.js": "/AnsurM/fifaclientapi-frontend/service-worker.js",
+  "static/css/2.ce697ac3.chunk.css.map": "/AnsurM/fifaclientapi-frontend/static/css/2.ce697ac3.chunk.css.map",
+  "static/css/main.82167697.chunk.css.map": "/AnsurM/fifaclientapi-frontend/static/css/main.82167697.chunk.css.map"
 }
