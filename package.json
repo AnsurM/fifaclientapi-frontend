@@ -2,7 +2,7 @@
   "name": "fifacustomerworkfrontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://AnsurM.github.io/fifaclientapi-frontend",
+  "homepage": "https://AnsurM.github.io/fifaclientapi-frontend/",
   "dependencies": {
     "axios": "^0.18.0",
     "bcrypt-nodejs": "0.0.3",
@@ -13,7 +13,7 @@
     "react-loading": "^2.0.3",
     "react-notify-toast": "^0.5.0",
     "react-scripts": "2.1.8",
-    "react-sound": "^1.2.0",
+    "react-sound": "^1.2.0", 
     "reactjs-popup": "^1.3.2",
     "tachyons": "^4.11.1"
   },
