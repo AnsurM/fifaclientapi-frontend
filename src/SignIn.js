@@ -1,5 +1,6 @@
 import React from 'react';
 import './SignIn.css';
+import constants from './constants';
 
 const axios = require('axios');
 
@@ -58,7 +59,7 @@ class SignIn extends React.Component {
 
    validateLogIn = (route) => {
     let that = this;
-    fetch('http://localhost:3001/signin',{
+    fetch(constants.url + '/signin',{
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -70,7 +71,7 @@ class SignIn extends React.Component {
         console.log(response);
         if(response.status == 200)
         {          
-           fetch('http://localhost:3001/getApiKey',{
+           fetch(constants.url + '/getApiKey',{
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

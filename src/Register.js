@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import constants from './constants';
 import './Register.css';
 
 const bcrypt = require('bcrypt-nodejs');
@@ -138,7 +138,7 @@ class Register extends React.Component {
                   console.log('hash ', myHash);
                   if(myHash.length > 0)
                   {
-                    fetch('http://localhost:3001/register',{
+                    fetch(constants.url + '/register',{
                       method: 'post',
                       headers: {'Content-Type': 'application/json'},
                       body: JSON.stringify({

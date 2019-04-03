@@ -3,7 +3,7 @@ import Modal from 'react-awesome-modal';
 import Sound from 'react-sound';
 import Notifications, {notify} from 'react-notify-toast';
 import ReactLoading from 'react-loading';
-
+import constants from './constants';
 
 class PlayerHandler extends Component {
 
@@ -31,14 +31,13 @@ class PlayerHandler extends Component {
 
     openModal = (cancelid) => {
         this.setState({
-            cardid: cancelid,
             visible : true
         });
     }
 
     clickModalOK = () =>
     {           
-        fetch('http://localhost:3001/cancelAuction',{
+        fetch(constants.url + '/cancelAuction',{
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -244,7 +243,7 @@ class PlayerHandler extends Component {
     {
         console.log("Checking purchase status for: ", playerID);
 
-        fetch('http://localhost:3001/checkAuctionStatus',{
+        fetch(constants.url + '/checkAuctionStatus',{
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -368,7 +367,7 @@ class PlayerHandler extends Component {
             {
 //                let myEmail = this.state.isAdmin ? "waqar@gmail.com" : this.state.email;
                 setTimeout(() => {
-                    fetch('http://localhost:3001/getData',{
+                    fetch(constants.url + '/getData',{
                         method: 'post',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
@@ -437,7 +436,7 @@ class PlayerHandler extends Component {
 
     componentDidMount() {
         
-        fetch('http://localhost:3001/pricefetch')
+        fetch(constants.url + '/pricefetch')
         .then(response => response.json())
         .then(data => {
 //            console.log("Data for todays rate is: ", data);
@@ -472,7 +471,7 @@ class PlayerHandler extends Component {
 
         let email = this.state.email;
 
-        fetch('http://localhost:3001/signout',{
+        fetch(constants.url + '/signout',{
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -493,7 +492,7 @@ class PlayerHandler extends Component {
 
     signOutAllUsers = () =>
     {
-        fetch('http://localhost:3001/supersignout',{
+        fetch(constants.url + '/supersignout',{
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-
-// var TableComponent = React.createClass({
+import constants from './constants';
 
   // Example Data
   var tableData = {
@@ -79,7 +78,7 @@ class TableClass extends Component {
     {
         let myConditions = {...this.state.conditions};
     
-        fetch('http://localhost:3001/getAuctionData',{
+        fetch(constants.url + '/getAuctionData',{
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
