@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bcrypt-nodejs": "0.0.3",
+    "cors": "^2.8.5",
     "gh-pages": "^2.0.1",
     "react": "^16.8.4",
     "react-awesome-modal": "^2.0.5",

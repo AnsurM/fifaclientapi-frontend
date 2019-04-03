@@ -7,8 +7,9 @@ import TableClass from './TableClass';
 import PlayerHandler from './PlayerHandler';
 import 'tachyons';
 
+// let cors = require('cors');
+// app.use(cors());
 
-const axios = require('axios');
 
 var display = null;
 
@@ -39,6 +40,11 @@ class App extends Component {
   {
     let that = this;
   }
+  
+  componentDidMount() {
+    
+  }
+  
 
   render() {
     if(this.state.route == "Login")
