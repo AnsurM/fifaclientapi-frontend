@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/fifaclientapi-frontend/precache-manifest.8ebf33e845e60f021d4e41403a78dc36.js"
+  "/fifaclientapi-frontend/precache-manifest.8030b64711039e5d68dbed6f1fa88d3c.js"
 );
 
 workbox.clientsClaim();
