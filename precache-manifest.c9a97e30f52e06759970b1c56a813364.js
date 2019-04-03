@@ -4,23 +4,23 @@ self.__precacheManifest = [
     "url": "/fifaclientapi-frontend/static/js/runtime~main.dfb19736.js"
   },
   {
-    "revision": "240fd44b2aedbef1d203",
-    "url": "/fifaclientapi-frontend/static/js/main.b48c7ab9.chunk.js"
+    "revision": "a1e9619db614dc410f21",
+    "url": "/fifaclientapi-frontend/static/js/main.8dc21207.chunk.js"
   },
   {
-    "revision": "5888a9c8117a4a532fe3",
-    "url": "/fifaclientapi-frontend/static/js/2.cff173f6.chunk.js"
+    "revision": "3d8fe63a7a877ac2ef22",
+    "url": "/fifaclientapi-frontend/static/js/2.8c61423d.chunk.js"
   },
   {
-    "revision": "240fd44b2aedbef1d203",
+    "revision": "a1e9619db614dc410f21",
     "url": "/fifaclientapi-frontend/static/css/main.82167697.chunk.css"
   },
   {
-    "revision": "5888a9c8117a4a532fe3",
+    "revision": "3d8fe63a7a877ac2ef22",
     "url": "/fifaclientapi-frontend/static/css/2.ce697ac3.chunk.css"
   },
   {
-    "revision": "8903edbb64528382e794bf1917fe8f1c",
+    "revision": "2878042dfbacac8529880040e8fe3b21",
     "url": "/fifaclientapi-frontend/index.html"
   }
 ];
