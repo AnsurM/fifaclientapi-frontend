@@ -3,7 +3,9 @@ import Modal from 'react-awesome-modal';
 import Sound from 'react-sound';
 import Notifications, {notify} from 'react-notify-toast';
 import ReactLoading from 'react-loading';
+import ReactCountdownClock from 'react-countdown-clock';
 import constants from './constants';
+
 
 class PlayerHandler extends Component {
 
@@ -31,7 +33,8 @@ class PlayerHandler extends Component {
 
     openModal = (cancelid) => {
         this.setState({
-            visible : true
+            visible : true,
+            cardid: cancelid
         });
     }
 
@@ -90,8 +93,12 @@ class PlayerHandler extends Component {
     {
         let Date1 = Math.floor( new Date().getTime()/1000 );
         let Date2 = timeRem;
-            
+        let Date3 = Date1 + 300;
+
+        var timeToExpire = Date3 - Date1;
+        
         var secdiff = Date2 - Date1; 
+        console.log(("Seconds to expire: ", secdiff));
         var mindiff = Math.floor( secdiff / 60 );
         secdiff = secdiff % 60;
         var hourdiff = Math.floor( mindiff / 60 );
@@ -102,7 +109,8 @@ class PlayerHandler extends Component {
         const diff = {
             days: daydiff,
             hours: hourdiff,
-            minutes: mindiff
+            minutes: mindiff,
+            timeToExp: timeToExpire
         };
     
         return diff;
@@ -126,6 +134,7 @@ class PlayerHandler extends Component {
                 cardID: cardId,
                 tradeID: tradeId,
                 status: tradeState,
+                expires: (Math.floor( new Date().getTime()/1000)) + 270,
                 time: {days: remTime.days,hours: remTime.hours, minutes: remTime.minutes}
             };
         });
@@ -155,10 +164,10 @@ class PlayerHandler extends Component {
         {
             backgroundColor: "green",
             color: "yellow",
-            width: "100px",
+            width: "80px",
             margin: "10px 10px",
             height: "auto",
-            padding: "10px",
+            padding: "5px",
             fontSize: "20px"
         };
 
@@ -166,10 +175,10 @@ class PlayerHandler extends Component {
         {
             backgroundColor: "red",
             color: "white",
-            width: "100px",
+            width: "80px",
             margin: "10px 10px",
             height: "auto",
-            padding: "10px",
+            padding: "5px",
             fontSize: "20px"
         };
 
@@ -191,14 +200,21 @@ class PlayerHandler extends Component {
                         <h3>Position: {player.position}</h3>
                         <h3>Starting bid: {player.startingBid}</h3>
                         <h3>Buy Now Price: {player.buyNowPrice}</h3>
-                        <h3>Time Remaining:</h3>
+                        <h3>Listing Time:</h3>
                         <h3>{player.time.days} day(s), {player.time.hours} hours, {player.time.minutes} minutes.</h3>
+                        <h3>Player Expires:</h3>
+                        <div style={{marginLeft: "20px"}}>
+                        <ReactCountdownClock seconds= {player.expires - (Math.floor( new Date().getTime()/1000))}
+                        color="darkorange"
+                        alpha={1}
+                        timeFormat="hms"
+                        size={90}
+                        onComplete={() => notify.show(("The player " + `${player.name}` + " has expired."),("error"),(5000))} />
+                        </div>
                         <h3>Auction Status: {player.status}</h3>
                         <div>
                         <button style={buttonStyle} onClick = {(event) => this.onBuyClick(event,player.cardID)}>Bought</button>
-                        <br />
                         <button style={cancelButtonStyle} onClick = {(event) => this.onCancelClick(event,player.cardID)}>Cancel</button>
-                        <br />
                         </div>
                     </div> 
                 );
@@ -558,7 +574,7 @@ class PlayerHandler extends Component {
                     <div>
                     <button 
                     style={{backgroundColor: "#3A4245", color:"gold", borderColor: "gold",  
-                    width: "auto", height: "auto", padding: "8px", margin: "50px 50px"}}
+                    width: "120px", height: "auto", padding: "8px", margin: "50px 50px"}}
                     onClick = {() => this.setState({playSoundStatus: "STOPPED"})}>
                     STOP SOUND
                     </button>
@@ -566,7 +582,7 @@ class PlayerHandler extends Component {
                     onClick={this.onSubmit}
                     // #3A4245
                     style = {{backgroundColor: "#3A4245", color:"chartreuse", borderColor: "gold", 
-                              width: "auto", height: "auto", padding: "4px", margin: "5px 50px"}}
+                              width: "150px", height: "auto", padding: "4px", margin: "5px 50px"}}
                     >
                     {this.state.buttonText.toUpperCase()}
                     </button>
@@ -584,10 +600,10 @@ class PlayerHandler extends Component {
 
                     <div id="PLAYER DATA" style = {{display:"flex-end", width: "80%"}}>
                         <div style = {{width: "100%", overflowX: "auto"}}>
-                            {this.state.displayData}
                             <div style={{marginLeft: "45%"}}>
                             {this.state.searching ? <h3><ReactLoading type="spin" color="chartreuse"/></h3> : null}  
                             </div>
+                            {this.state.displayData}
                             <br />
                             {this.state.noPlayerDisplay}
                         </div>
