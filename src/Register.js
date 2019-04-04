@@ -4,6 +4,7 @@ import './Register.css';
 
 const bcrypt = require('bcrypt-nodejs');
 
+const axios = require('axios');
 
 
 class Register extends React.Component {
@@ -138,15 +139,22 @@ class Register extends React.Component {
                   console.log('hash ', myHash);
                   if(myHash.length > 0)
                   {
-                    fetch(constants.url + '/register',{
-                      method: 'post',
-                      headers: {'Content-Type': 'application/json'},
-                      body: JSON.stringify({
+                    axios.post(constants.url + '/register', {
                       email: that.state.email,
                       password: myHash,
                       name: that.state.name,
-                      })
                     })
+              
+                    
+                    // fetch(constants.url + '/register',{
+                    //   method: 'post',
+                    //   headers: {'Content-Type': 'application/json'},
+                    //   body: JSON.stringify({
+                    //   email: that.state.email,
+                    //   password: myHash,
+                    //   name: that.state.name,
+                    //   })
+                    // })
                     .then(user => {
                       console.log('user ', user);
                       if(user.status === 200)

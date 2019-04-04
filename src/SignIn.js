@@ -4,7 +4,6 @@ import constants from './constants';
 
 const axios = require('axios');
 
-
 class SignIn extends React.Component {
 
   constructor(props){
@@ -61,6 +60,7 @@ class SignIn extends React.Component {
     let that = this;
     fetch(constants.url + '/signin',{
       method: 'post',
+      mode:'cors',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
       email: this.state.signInEmail,
@@ -109,9 +109,67 @@ class SignIn extends React.Component {
     .catch(err => {console.log(err)});
 }
 
+  validateLogIn1 = (route) => 
+  {
+    let that = this;
+      axios.post(constants.url + '/signin', {
+        email: this.state.signInEmail,
+        password: this.state.signInPassword,
+      })
+      .then(function (response) {
+        console.log(response);
+        if(response.status == 200)
+        {          
+           fetch(constants.url + '/getApiKey',{
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                email: that.state.signInEmail,
+                })
+              })
+              .then(response => response.json()) 
+              .then(data =>
+            {
+              // console.log('resp ', data);
+              that.setState({signInEmail: data.email});
+              that.setState({apiKey: data.apikey});
+              that.updateEmailAndApiKey();
+              if(that.state.apiKey)
+              {
+                that.props.updateRoute(route);
+              }
+            })
+            .catch(function (error) {
+              console.log('errorrr ', error);
+            });
+        }
+        else
+        {
+          if(response.status == 400)
+          {
+            alert("No data found. Please check your login credentials.");
+          }
+          else
+          {
+            alert("We are experiencing difficulties logging in. Please try later.");
+          }
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });    
+  }
+
  onSubmitSignIn1 = (route) =>
   {
-    this.validateLogIn(route);
+    if(route == "Register")
+    {
+      this.props.updateRoute(route);
+    }
+    else
+    {
+      this.validateLogIn1(route);
+    }
   }
 
   render(){
