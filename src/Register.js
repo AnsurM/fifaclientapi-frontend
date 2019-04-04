@@ -1,6 +1,7 @@
 import React from 'react';
 import constants from './constants';
 import './Register.css';
+import Notifications, {notify} from 'react-notify-toast';
 
 const bcrypt = require('bcrypt-nodejs');
 
@@ -43,15 +44,15 @@ class Register extends React.Component {
       {
         if(!email)
         {
-          alert("Email field can't be empty");
+          notify.show("Email field can't be empty");
         }
         else if(!password)
         {
-          alert("Passwod field can't be empty");
+          notify.show("Passwod field can't be empty");
         }
         if(!name)
         {
-          alert("Name field can't be empty");
+          notify.show("Name field can't be empty");
         }
       }
       else if(this.hasNumber(name))
@@ -72,7 +73,7 @@ class Register extends React.Component {
         })
         .then(response => response.json())
         .then(user => {
-          console.log(user);
+      //    console.log(user);
           if(user === true)
           {        
             alert("Registration successful!");
@@ -98,7 +99,7 @@ class Register extends React.Component {
             // Store hash in your password DB.
               return hash;
         })
-        console.log('hashword ', hashWord);
+      //  console.log('hashword ', hashWord);
         return await hashWord;
       }
     }
@@ -134,9 +135,9 @@ class Register extends React.Component {
                 if(!err)
                 {
                   myHash = hash;
-                  console.log('myHash ', myHash);
+          //        console.log('myHash ', myHash);
 
-                  console.log('hash ', myHash);
+          //        console.log('hash ', myHash);
                   if(myHash.length > 0)
                   {
                     axios.post(constants.url + '/register', {
@@ -156,7 +157,7 @@ class Register extends React.Component {
                     //   })
                     // })
                     .then(user => {
-                      console.log('user ', user);
+          //            console.log('user ', user);
                       if(user.status === 200)
                       {        
                         alert("Registration successful!");
@@ -167,17 +168,20 @@ class Register extends React.Component {
                         alert("This user already is registered!");
                       }
                     })
-                    .catch(err => console.log('error entering student \n', err));
+                    .catch(err => notify.show("The page behaved unexpectedly while trying to register. Please try again shortly.", "error", 10000));
                   }
                   else
                   {
-                    alert("Error occured during registration. Please try again later.");
+                    notify.show("The page behaved unexpectedly while trying to register. Please try again shortly.", "error", 10000);
                   }
                 }
-          })
+                else
+                {
+                  notify.show("The page behaved unexpectedly while trying to register. Please try again shortly.", "error", 10000);
+                }
+        })
+      }
     }
-  }
-
 
     onSubmitReg1 = () =>
   {
@@ -190,6 +194,8 @@ class Register extends React.Component {
 
     render (){
       return (
+        <div>
+        <Notifications />
         <article className="br3 w-100 w-50-m w-25-l mw6 shadow-5 center registerbox">
         <main className="pa4 black-80">
         <div className="measure">
@@ -241,6 +247,7 @@ class Register extends React.Component {
         </div>
       </main>
       </article>
+    </div>
     );
 
   }

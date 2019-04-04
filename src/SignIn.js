@@ -1,6 +1,7 @@
 import React from 'react';
 import './SignIn.css';
 import constants from './constants';
+import Notifications, {notify} from 'react-notify-toast';
 
 const axios = require('axios');
 
@@ -43,10 +44,10 @@ class SignIn extends React.Component {
           }
           else
           {
-            alert(result.message);
+            notify.show(result.message);
           }
     })
-    .catch(err => alert(err.message))
+    .catch(err => notify.show(err.message))
 
   }
 
@@ -68,7 +69,7 @@ class SignIn extends React.Component {
       })
     })
     .then(response => {
-        console.log(response);
+    //    console.log(response);
         if(response.status == 200)
         {          
            fetch(constants.url + '/getApiKey',{
@@ -91,22 +92,28 @@ class SignIn extends React.Component {
               }
             })
             .catch(function (error) {
-              console.log('errorrr ', error);
+              console.log("Error: " , error);
+              notify.show("There was an error trying to login. Please try again shortly.", "error", 10000);
             });
         }
         else
         {
           if(response.status == 400)
           {
-            alert("No data found. Please check your login credentials.");
+            console.log("Error: " , response);
+            notify.show("The login details are invalid. Please re-check and try again.", "warning", 7000);
           }
           else
           {
-            alert("We are experiencing difficulties logging in. Please try later.");
+            console.log("Error: " , response);
+            notify.show("There was an error trying to login. Please try again shortly.", "error", 10000);
           }
         }
       })
-    .catch(err => {console.log(err)});
+    .catch(err => {        
+      console.log("Error: " , err);
+      notify.show("There was an error trying to login. Please try again shortly.", "error", 10000);
+    });
 }
 
   validateLogIn1 = (route) => 
@@ -147,16 +154,17 @@ class SignIn extends React.Component {
         {
           if(response.status == 400)
           {
-            alert("No data found. Please check your login credentials.");
+            notify.show("No data found. Please check your login credentials.");
           }
           else
           {
-            alert("We are experiencing difficulties logging in. Please try later.");
+            notify.show("We are experiencing difficulties logging in. Please try later.");
           }
         }
       })
       .catch(function (error) {
-        console.log(error);
+        console.log("Login error: ", error.status);
+        notify.show("Error while logging in" + error);
       });    
   }
 
@@ -174,6 +182,8 @@ class SignIn extends React.Component {
 
   render(){
     return (
+      <div>
+      <Notifications />
       <article className="br3 w-100 w-50-m w-25-l mw6 shadow-5 center signinbox">
       <main className="pa4 black-80">
         <div className="measure">
@@ -219,7 +229,7 @@ class SignIn extends React.Component {
         </div>
       </main>
       </article>
-
+      </div>
   	 );
   }
 }

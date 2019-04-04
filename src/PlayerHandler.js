@@ -77,7 +77,7 @@ class PlayerHandler extends Component {
                 );
         })
         .catch(function (error) {
-            console.log(error);
+            notify.show((error), "error", 5000);
             this.setState({cardid: 0, visible: false});
         });
     }
@@ -98,7 +98,7 @@ class PlayerHandler extends Component {
         var timeToExpire = Date3 - Date1;
         
         var secdiff = Date2 - Date1; 
-        console.log(("Seconds to expire: ", secdiff));
+    //    console.log(("Seconds to expire: ", secdiff));
         var mindiff = Math.floor( secdiff / 60 );
         secdiff = secdiff % 60;
         var hourdiff = Math.floor( mindiff / 60 );
@@ -119,11 +119,11 @@ class PlayerHandler extends Component {
     storePlayerData = (data) => 
     {
         let prevData = this.state.playerData;
-        console.log("Data is: ", data.data);
+//        console.log("Data is: ", data.data);
         let tempData = data.data.map(element => {
             const { player_name, player_rating, position, startingBid, buyNowPrice, tradeState, cardId, expires, tradeId} = element;
             let remTime = this.timeHandler(expires);
-            console.log("Rem time is: ", remTime);
+    //        console.log("Rem time is: ", remTime);
             //            let randomID = Math.floor(Math.random() * 16739589301);
             return {
                 name: player_name,
@@ -235,13 +235,13 @@ class PlayerHandler extends Component {
 
     onCancelClick = (event, tradeid) =>
     {
-        console.log("Cancel requested for :", tradeid);
+//        console.log("Cancel requested for :", tradeid);
 //        <input type="button" value="Open" onClick={() => this.openModal()} />
         this.openModal(tradeid);
     }
 
     onBuyClick = (event,tradeid) => {
-        console.log("Purchase requested for: ", tradeid);
+//        console.log("Purchase requested for: ", tradeid);
         let notBought = this.state.playersLeft;
 
         let currPlayers = [...this.state.playerData];
@@ -257,7 +257,7 @@ class PlayerHandler extends Component {
 
     checkBoughtStatus = (playerID, currPlayers, index, notBought) =>
     {
-        console.log("Checking purchase status for: ", playerID);
+//        console.log("Checking purchase status for: ", playerID);
 
         fetch(constants.url + '/checkAuctionStatus',{
             method: 'post',
@@ -278,11 +278,11 @@ class PlayerHandler extends Component {
                         currPlayers[index].status = "Bought!";
                         currPlayers.splice(index,1);
                         // console.log("State Data: ", this.state.Data);
-                        console.log("Curr Players: ", currPlayers);
+             //           console.log("Curr Players: ", currPlayers);
                         if(notBought > 0)
                         {
                             notBought--;
-                            console.log("Players to be bought: ", notBought);
+            //                console.log("Players to be bought: ", notBought);
                         }
                         this.setState({playerData: currPlayers, playersLeft: notBought}, () => this.displayPlayerData(currPlayers));
                     }
@@ -293,7 +293,7 @@ class PlayerHandler extends Component {
                         currPlayers[index].status = "This player has expired.";
                         // currPlayers.splice(index,1);
                         // console.log("State Data: ", this.state.Data);
-                        console.log("Curr Players: ", currPlayers);
+           //             console.log("Curr Players: ", currPlayers);
                         // if(notBought > 0)
                         // {
                         //     notBought--;
@@ -308,7 +308,7 @@ class PlayerHandler extends Component {
                         currPlayers[index].status = "NOT Bought yet.";
                         // currPlayers.splice(index,1);
                         // console.log("State Data: ", this.state.Data);
-                        console.log("Curr Players: ", currPlayers);
+       //                 console.log("Curr Players: ", currPlayers);
                         // if(notBought > 0)
                         // {
                         //     notBought--;
@@ -416,9 +416,9 @@ class PlayerHandler extends Component {
                         }
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        notify.show("Unexpected error occured while requesting players. Please try later or contact the administrator if the problem persists.", "warning", 15000);
                     });    
-                }, 400);
+                }, 500);
             }
         }        
         else
@@ -480,7 +480,7 @@ class PlayerHandler extends Component {
 
             }
         })
-        .catch(err => console.log("Error while fetching rate from server."));
+        .catch(err => notify.show("Error while fetching rate from server. Please re-login to get today's rate.", "warning", 7500));
     }
     
     onClickSignOut = () => {
@@ -498,7 +498,7 @@ class PlayerHandler extends Component {
         .then(data => {
             this.props.updateRoute("Login");
         })
-        .catch(err => console.log("Err sending logout req"));
+        .catch(err => notify.show("The page behaved unexpectedly while trying to log out. You can safely close the browser now.", "success", 7000));
     }
 
     onClickTable = () =>
@@ -519,20 +519,19 @@ class PlayerHandler extends Component {
         .then(data => {
             if(data.message == "SUCCESS")
             {
-                alert("All users logged out.");
+                notify.show("All users logged out.", "success", 6000);
             }
             else
             {
-                alert("Error logging users out.");
+                notify.show("The page behaved unexpectedly while trying to log out. Please try again shortly.", "error", 10000);
             }
         })
-        .catch(err => console.log("Err processing all log out req"));
-
+        .catch(err => notify.show("The page behaved unexpectedly while trying to log out. Please try again shortly.", "error", 10000));
     }
 
     render() {
         let isAdminStatus = this.state.isAdmin;
-        console.log("isAdmin :", isAdminStatus);
+    //    console.log("isAdmin :", isAdminStatus);
         let superLogOut = null;
         if(isAdminStatus)
         {

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import constants from './constants';
+import Notifications, {notify} from 'react-notify-toast';
 
   // Example Data
   var tableData = {
@@ -91,6 +92,14 @@ class TableClass extends Component {
         .then(data => {
             console.log("Data is: ", data);
             
+          if(!data.length)
+          {
+            notify.show("There were no records found in the server.");
+              alert("No records found");  
+          }
+
+          else
+          {
             let values = [];
             var totalEarned = 0;
             if(Object.values(data))
@@ -98,22 +107,21 @@ class TableClass extends Component {
               values = data;
               values.map(entry => {
                 totalEarned = totalEarned + entry.earned;
-              })
-            }
-
-            console.log("Total earned is: ", totalEarned);
-            console.log("values are: ", values);
                 this.setState({
-                    data: {
+                  data: {
 //                        columns: columns,
-                        rows: values
-                    },
-                  totalEarning: totalEarned
-                });
+                      rows: values
+                  },
+                totalEarning: totalEarned
+              });
+            })
+            }
+          }
         })
         .catch(function (error) {
-            console.log(error);
-        });    
+            console.log("Records error: ", error);
+            notify.show("There was an error trying to obtain records. Please try again shortly.", "error", 10000);
+          });    
 
     }
 
@@ -122,7 +130,7 @@ class TableClass extends Component {
     }
 
     onChange = (event) => {
-        console.log("Triggered: ",event.target);
+    //    console.log("Triggered: ",event.target);
         let value = event.target.value;
         let tempCondition = {...this.state.conditions};
         if(event.target.id == "assign")
@@ -153,7 +161,7 @@ class TableClass extends Component {
 
 
     render() {
-        console.log(this.state.data);
+    //    console.log(this.state.data);
 
         let tempConditions = {
           cardId: "",
@@ -217,7 +225,7 @@ class TableClass extends Component {
       // Decorate with Bootstrap CSS
       return (
         <div style = {{height: "700px", overflow:"scroll", color: "white"}}>
-
+        <Notifications />
             <div style={{display: "flex", width: "100%"}}>
 
                     <div style={{width: "20%"}}>
