@@ -1,15 +1,15 @@
 {
-  "main.css": "/fifaclientapi-frontend/static/css/main.82167697.chunk.css",
-  "main.js": "/fifaclientapi-frontend/static/js/main.2d8ce1c8.chunk.js",
-  "main.js.map": "/fifaclientapi-frontend/static/js/main.2d8ce1c8.chunk.js.map",
+  "main.css": "/fifaclientapi-frontend/static/css/main.ca958de4.chunk.css",
+  "main.js": "/fifaclientapi-frontend/static/js/main.035f9590.chunk.js",
+  "main.js.map": "/fifaclientapi-frontend/static/js/main.035f9590.chunk.js.map",
   "runtime~main.js": "/fifaclientapi-frontend/static/js/runtime~main.dfb19736.js",
   "runtime~main.js.map": "/fifaclientapi-frontend/static/js/runtime~main.dfb19736.js.map",
   "static/css/2.ce697ac3.chunk.css": "/fifaclientapi-frontend/static/css/2.ce697ac3.chunk.css",
-  "static/js/2.1048823f.chunk.js": "/fifaclientapi-frontend/static/js/2.1048823f.chunk.js",
-  "static/js/2.1048823f.chunk.js.map": "/fifaclientapi-frontend/static/js/2.1048823f.chunk.js.map",
+  "static/js/2.c3f66a88.chunk.js": "/fifaclientapi-frontend/static/js/2.c3f66a88.chunk.js",
+  "static/js/2.c3f66a88.chunk.js.map": "/fifaclientapi-frontend/static/js/2.c3f66a88.chunk.js.map",
   "index.html": "/fifaclientapi-frontend/index.html",
-  "precache-manifest.64f2380bc40bb8191e313327a5766635.js": "/fifaclientapi-frontend/precache-manifest.64f2380bc40bb8191e313327a5766635.js",
+  "precache-manifest.26fc0b76f4dea80f60a76fb3ca396a7a.js": "/fifaclientapi-frontend/precache-manifest.26fc0b76f4dea80f60a76fb3ca396a7a.js",
   "service-worker.js": "/fifaclientapi-frontend/service-worker.js",
   "static/css/2.ce697ac3.chunk.css.map": "/fifaclientapi-frontend/static/css/2.ce697ac3.chunk.css.map",
-  "static/css/main.82167697.chunk.css.map": "/fifaclientapi-frontend/static/css/main.82167697.chunk.css.map"
+  "static/css/main.ca958de4.chunk.css.map": "/fifaclientapi-frontend/static/css/main.ca958de4.chunk.css.map"
 }
