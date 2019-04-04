@@ -145,19 +145,7 @@ class Register extends React.Component {
                       password: myHash,
                       name: that.state.name,
                     })
-              
-                    
-                    // fetch(constants.url + '/register',{
-                    //   method: 'post',
-                    //   headers: {'Content-Type': 'application/json'},
-                    //   body: JSON.stringify({
-                    //   email: that.state.email,
-                    //   password: myHash,
-                    //   name: that.state.name,
-                    //   })
-                    // })
                     .then(user => {
-          //            console.log('user ', user);
                       if(user.status === 200)
                       {        
                         alert("Registration successful!");

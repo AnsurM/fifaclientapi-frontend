@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import Register from './Register';
-import PlayerData from './PlayerData';
+// import PlayerData from './PlayerData';
 import SignIn from './SignIn';
 import TableClass from './TableClass';
 import PlayerHandler from './PlayerHandler';
 import 'tachyons';
+import Register from './Register';
 
 // let cors = require('cors');
 // app.use(cors());
@@ -42,13 +42,6 @@ class App extends Component {
   }
   
   componentDidMount() {
-    window.addEventListener("beforeunload", function (e) {
-      var confirmationMessage = "\o/";
-    
-      (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-      alert("Allah Hafiz.");
-      return confirmationMessage;                            //Webkit, Safari, Chrome
-    });    
   }
   
 

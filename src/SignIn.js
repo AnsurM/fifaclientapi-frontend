@@ -225,14 +225,6 @@ class SignIn extends React.Component {
             type="submit" 
             value="Sign in"/>
           </div>
-          <br />
-          <div>
-            <input 
-            onClick = {() => this.onSubmitSignIn1("Register")}
-            className="input b ph3 pv2 input-reset ba b--black hover-bg-green grow pointer f6 dib" 
-            type="submit" 
-            value="Register User"/>
-          </div>
           </fieldset>
         </div>
       </main>

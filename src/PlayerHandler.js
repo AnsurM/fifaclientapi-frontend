@@ -5,6 +5,7 @@ import Notifications, {notify} from 'react-notify-toast';
 import ReactLoading from 'react-loading';
 import ReactCountdownClock from 'react-countdown-clock';
 import constants from './constants';
+import Register from './Register';
 
 
 class PlayerHandler extends Component {
@@ -454,7 +455,9 @@ class PlayerHandler extends Component {
         
         window.addEventListener("beforeunload", (ev) => {
             ev.preventDefault();
-            this.onClickSignOut();
+            this.setState({
+                searching: false
+            }, () => this.onClickSignOut());
         });
 
         fetch(constants.url + '/pricefetch')
@@ -512,6 +515,11 @@ class PlayerHandler extends Component {
         this.props.updateRoute("Table");
     }
 
+    onClickRegister = () =>
+    {
+        this.props.updateRoute("Register");
+    }
+
     signOutAllUsers = () =>
     {
         fetch(constants.url + '/supersignout',{
@@ -551,6 +559,10 @@ class PlayerHandler extends Component {
             style = {{backgroundColor: "black", color:"red", borderColor: "gold", 
                   width: "auto", height: "auto", padding: "8px", margin: "30px 50px"}}                        
             onClick={this.signOutAllUsers}>Log ALL USERS Out</button>
+            <button 
+            style = {{backgroundColor: "black", color:"chartreuse", borderColor: "gold", 
+            width: "auto", height: "auto", padding: "8px", margin: "30px 50px"}}                        
+            onClick={this.onClickRegister}>Register User</button>
             </div>;
         }
 
