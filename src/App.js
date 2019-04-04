@@ -42,7 +42,13 @@ class App extends Component {
   }
   
   componentDidMount() {
+    window.addEventListener("beforeunload", function (e) {
+      var confirmationMessage = "\o/";
     
+      (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+      alert("Allah Hafiz.");
+      return confirmationMessage;                            //Webkit, Safari, Chrome
+    });    
   }
   
 

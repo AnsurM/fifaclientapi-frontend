@@ -5,6 +5,10 @@ import Notifications, {notify} from 'react-notify-toast';
 
 const axios = require('axios');
 
+window.onbeforeunload = function() {
+  return 'You have unsaved changes!';
+}
+
 class SignIn extends React.Component {
 
   constructor(props){
@@ -119,7 +123,9 @@ class SignIn extends React.Component {
   validateLogIn1 = (route) => 
   {
     let that = this;
-      axios.post(constants.url + '/signin', {
+//    notify.show("Logging in. Please wait.", "success", 3000);
+//    notify.show("Logging in. Please wait.", "success", 1000);
+    axios.post(constants.url + '/signin', {
         email: this.state.signInEmail,
         password: this.state.signInPassword,
       })
@@ -147,24 +153,21 @@ class SignIn extends React.Component {
               }
             })
             .catch(function (error) {
-              console.log('errorrr ', error);
+              notify.show("Server error occured. Please retry logging in after a few minutes. ", "warning", 5000);
             });
-        }
-        else
-        {
-          if(response.status == 400)
-          {
-            notify.show("No data found. Please check your login credentials.");
-          }
-          else
-          {
-            notify.show("We are experiencing difficulties logging in. Please try later.");
-          }
         }
       })
       .catch(function (error) {
-        console.log("Login error: ", error.status);
-        notify.show("Error while logging in" + error);
+        console.log("Login error: ", error);
+        let myErr = error.toString();
+        if(myErr.includes("400"))
+        {
+          notify.show("Invalid login credentials detected. Please verify and try again. ", "error", 5000);
+        }
+        else
+        {
+          notify.show("Server error occured. Please retry logging in after a few minutes or contact the admin if problem persists.", "warning", 5000);
+        }
       });    
   }
 
@@ -176,9 +179,14 @@ class SignIn extends React.Component {
     }
     else
     {
+//      notify.show("Logging in. Please wait.", "success", 200);
       this.validateLogIn1(route);
     }
   }
+
+  componentDidMount() {
+  }
+  
 
   render(){
     return (

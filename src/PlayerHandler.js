@@ -452,6 +452,11 @@ class PlayerHandler extends Component {
 
     componentDidMount() {
         
+        window.addEventListener("beforeunload", (ev) => {
+            ev.preventDefault();
+            this.onClickSignOut();
+        });
+
         fetch(constants.url + '/pricefetch')
         .then(response => response.json())
         .then(data => {
@@ -496,6 +501,7 @@ class PlayerHandler extends Component {
         })
         .then(response => response.json())             
         .then(data => {
+            console.log("Logged out.");
             this.props.updateRoute("Login");
         })
         .catch(err => notify.show("The page behaved unexpectedly while trying to log out. You can safely close the browser now.", "success", 7000));
