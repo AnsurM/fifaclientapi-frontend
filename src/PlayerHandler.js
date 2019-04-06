@@ -16,7 +16,7 @@ class PlayerHandler extends Component {
             displayData: <h3></h3>,
             buttonText: "Request Players.",
             searching: false,
-            noPlayerDisplay: <h3>Press "Request Data" to check for available players.</h3>,
+            noPlayerDisplay: <h3 style={{color: "chartreuse"}}>Press "Request Data" to check for available players.</h3>,
             playerData: [],
             email: this.props.data.email,
             apikey: this.props.data.apikey,
@@ -437,7 +437,7 @@ class PlayerHandler extends Component {
         {
             this.setState({
                 buttonText: "Request Players.", 
-                noPlayerDisplay: <h3>Press "Request Players" to search for players....</h3>, 
+                noPlayerDisplay: <h3 style={{color: "chartreuse"}}>Press "Request Players" to search for players....</h3>, 
                 searching: false
             });
         }
@@ -567,7 +567,7 @@ class PlayerHandler extends Component {
         }
 
         return (
-            <div>
+            <div style={{padding: "0px 0px 170px 0px"}}>
             <Notifications />
             <div style={{display:"flex", width: "100%"}}  tabIndex = {1} key = {this.state.playersLeft} onKeyDown = {this.onKeyDown} >
                     

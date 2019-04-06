@@ -59,7 +59,7 @@ import Notifications, {notify} from 'react-notify-toast';
   };
 
 
-class TableClass extends Component {
+class AdminRecords extends Component {
 
     constructor(props) {
         super(props);
@@ -78,7 +78,9 @@ class TableClass extends Component {
     setDataValues = () =>
     {
         let myConditions = {...this.state.conditions};
-    
+        let values = [];
+        var totalEarned = 0;
+
         fetch(constants.url + '/getAuctionData',{
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -94,14 +96,12 @@ class TableClass extends Component {
             
           if(!data.length)
           {
-            notify.show("There were no records found in the server.");
-              alert("No records found");  
+            notify.show("There were no records found in the server.", "warning", 5000);
+//            alert("No records found");  
           }
 
           else
           {
-            let values = [];
-            var totalEarned = 0;
             if(Object.values(data))
             {
               values = data;
@@ -117,6 +117,13 @@ class TableClass extends Component {
             })
             }
           }
+            this.setState({
+              data: {
+  //                        columns: columns,
+                  rows: values
+              },
+            totalEarning: totalEarned
+          });
         })
         .catch(function (error) {
             console.log("Records error: ", error);
@@ -151,8 +158,12 @@ class TableClass extends Component {
         }
         this.setState({
           conditions: tempCondition
-        }, () => this.setDataValues()
-        );
+        });
+    }
+
+    onSubmit = () => 
+    {
+      this.setDataValues();      
     }
 
     onClickGoBack = () => {
@@ -243,7 +254,7 @@ class TableClass extends Component {
 
 
                     <div style={{display:"flex", width: "80%", marginLeft: "5%"}}>
-                      <div style={{ width: "40%", }}>
+                      <div style={{ width: "35%", }}>
                       <h4>Card ID: </h4>
                       <input id="cardid" style={{marginLeft: '10px', borderColor: "gold", borderWidth: "3px",
                                       backgroundColor: "#3A4245", color: "gold", textAlign: "center",
@@ -262,7 +273,7 @@ class TableClass extends Component {
                           onChange={this.onChange} ></input>
 
                       </div>                    
-                      <div style={{ width: "40%", }}>
+                      <div style={{ width: "35%", marginLeft: "5px"}}>
                       <h4>Auction Status: </h4>
                       <input id="status" style={{marginLeft: '10px', borderColor: "gold", borderWidth: "3px",
                                       backgroundColor: "#3A4245", color: "gold", textAlign: "center",
@@ -280,6 +291,13 @@ class TableClass extends Component {
                           value = {`${tempConditions.received_time}`}
                           onChange={this.onChange} ></input>
                       </div>
+                      <div>                      
+                      <button 
+                          style = {{backgroundColor: "black", color:"chartreuse", borderColor: "gold", 
+                                width: "80px", height: "30px", margin: "0px 50px", marginTop: "110px"}}                        
+//                                , padding: "8px", margin: "30px 50px"
+                          onClick={this.onSubmit}>Search</button>
+                      </div>
                     </div>
             </div>
               <br />
@@ -295,4 +313,4 @@ class TableClass extends Component {
 }
           
 
-export default TableClass;
+export default AdminRecords;

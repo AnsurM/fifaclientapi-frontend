@@ -1,8 +1,57 @@
+@import url("https://fonts.googleapis.com/css?family=Cabin|Oxygen|Rubik|Roboto+Mono");
+
 .App {
   text-align: center;
+  margin: "-500px 0px"
 }
 
+.bgImage
+{
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  position: relative;
+  z-index: -1;
+}
+
+.bg { 
+  background: url('https://media.playstation.com/is/image/SCEA/fifa-19-stadium-background-blur-01-ps4-us-08jun18?$native_nt$');
+
+ /* The image used */
+/*  background-image: url("bgimg.jpg");*/
+
+ /* Full height */
+ height: 100%; 
+
+ /* Add the blur effect */
+ filter: blur(0px);
+ -webkit-filter: blur(0px);    background-position:center top;
+
+ /* Center and scale the image nicely */
+ background-position: center;
+ background-repeat: no-repeat;
+ background-size: cover;
+}
+
+
+#logo {
+  font-family: 'Rubik', cursive;
+  color: floralwhite;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 80px;
+  /* font-weight: 500; */
+  letter-spacing: 1px;
+  line-height: 1;
+  text-shadow: #2D131E 5px 5px; 
+  /* border: 2px solid brown; */
+  position: relative;
+}
 body {
+  font-family: sans-serif;
   background-color: darkslategray;
   color: deepskyblue;
+  z-index: 1;
 }

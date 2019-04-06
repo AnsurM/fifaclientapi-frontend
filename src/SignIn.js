@@ -184,51 +184,80 @@ class SignIn extends React.Component {
     }
   }
 
-  componentDidMount() {
-  }
-  
-
   render(){
     return (
       <div>
-      <Notifications />
-      <article className="br3 w-100 w-50-m w-25-l mw6 shadow-5 center signinbox">
-      <main className="pa4 black-80">
-        <div className="measure">
-          <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-            <legend className="signIn">Sign In</legend>
-            <div className="mt3">
-              <label className="db fw6 lh-copy f4 myTColor" htmlFor="email-address">Email</label>
-              <input 
-              className="pa2 w-100" 
-              type="email" 
-              name="email-address"  
-              id="email-address"
-              onChange = {this.onEmailChange}
-              />
-            </div>
-            <div className="mv3">
-              <label className="db fw6 lh-copy f4 myTColor" htmlFor="password">Password</label>
-              <input 
-              className="pa2 w-100" 
-              type="password" 
-              name="password"  
-              id="password"
-              onChange = {this.onPasswordChange}
-
-              />
-            </div>
+        <Notifications />
+        <div style={{width: "100%"}}>
           <div>
-            <input 
-            onClick = {() => this.onSubmitSignIn1("App")}
-            className="input b ph3 pv2 input-reset ba b--black hover-bg-green grow pointer f6 dib" 
-            type="submit" 
-            value="Sign in"/>
+            <div id="SIGN IN FORM" style={{marginTop:"30px"}}>
+            <article className="br3 w-60 mw6 shadow-5 center signinbox">
+            <main className="pa4 black-80">
+              <div className="measure">
+                <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
+                  <legend className="signIn">Sign In</legend>
+                  <div className="mt3">
+                    <label className="db fw6 lh-copy f4 myTColor" htmlFor="email-address">Email</label>
+                    <input 
+                    className="pa2 w-100" 
+                    type="email" 
+                    name="email-address"  
+                    id="email-address"
+                    onChange = {this.onEmailChange}
+                    />
+                  </div>
+                  <div className="mv3">
+                    <label className="db fw6 lh-copy f4 myTColor" htmlFor="password">Password</label>
+                    <input 
+                    className="pa2 w-100" 
+                    type="password" 
+                    name="password"  
+                    id="password"
+                    onChange = {this.onPasswordChange}
+
+                    />
+                  </div>
+                <div>
+                  <input 
+                  onClick = {() => this.onSubmitSignIn1("App")}
+                  className="input b ph3 pv2 input-reset ba b--black hover-bg-green grow pointer f6 dib" 
+                  type="submit" 
+                  value="Sign in"/>
+                </div>
+                </fieldset>
+              </div>
+            </main>
+            </article>
+            </div>
+            <div id="OUR INFO" style={{display: "inline-flex", width: "400px", 
+              marginTop: "50px", color: "floralwhite", 
+              backgroundColor: "rgba(119,136,153, 0.4)",
+              borderRadius: "50px"
+              }}> 
+              <div style={{width:"100%", justifyContent: "center"}}>
+                  <div>
+                    <h3>Contact Us</h3>
+                  </div>
+                  <div style={{textAlign: "start", margin: "40px 50px"}}>
+                    <div id="Email" style={{display: "flex"}}>
+                    <img 
+                      src="http://icons.iconarchive.com/icons/cornmanthe3rd/metronome/72/Communication-email-blue-icon.png"
+                      width="70px" height="49px"                
+                      />
+                    <p style={{marginLeft: "30px" , display:"flex", justifyContent: "center"}}>ourcontact@gmail.com</p>
+                      
+                    </div>
+                    <div id="Skype" style={{display: "flex"}}>
+                      <img 
+                      src="http://www.myiconfinder.com/uploads/iconsets/128-128-3a8444ba64b326d9b5b3728b29ee8171-skype.png" 
+                      width="70px" height="70px"/>
+                    <p style={{marginLeft: "30px", display:"flex", justifyContent: "center"}}>ourcontact@gmail.com</p>
+                    </div>
+                  </div>
+              </div>
+            </div>
           </div>
-          </fieldset>
         </div>
-      </main>
-      </article>
       </div>
   	 );
   }
